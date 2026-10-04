@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="InsightFlow.DailyEntryPage"
+    Title="Daily Entry"
+    BackgroundColor="#F8FAFC">
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="30"
+            Spacing="20">
+
+            <!-- =====================================================
+                 HEADER
+                 ===================================================== -->
+            <Grid
+                ColumnDefinitions="Auto,*"
+                ColumnSpacing="15">
+
+                <Button
+                    Grid.Column="0"
+                    Text="← Back"
+                    BackgroundColor="Transparent"
+                    TextColor="#2563EB"
+                    FontAttributes="Bold"
+                    Clicked="OnBackClicked" />
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Spacing="3">
+
+                    <Label
+                        Text="DAILY WORK ENTRY"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        TextColor="#0F172A" />
+
+                    <Label
+                        Text="Record your work activity for the selected date."
+                        FontSize="13"
+                        TextColor="#64748B" />
+
+                </VerticalStackLayout>
+
+            </Grid>
+
+
+            <!-- =====================================================
+                 EMPLOYEE INFORMATION
+                 ===================================================== -->
+            <Border
+                BackgroundColor="#0F2747"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 12"
+                Padding="20">
+
+                <Grid
+                    ColumnDefinitions="*,*,*,*"
+                    ColumnSpacing="20">
+
+                    <!-- EMPLOYEE -->
+                    <VerticalStackLayout
+                        Grid.Column="0">
+
+                        <Label
+                            Text="EMPLOYEE"
+                            FontSize="10"
+                            TextColor="#93C5FD"
+                            FontAttributes="Bold" />
+
+                        <Label
+                            x:Name="EmployeeNameLabel"
+                            Text="-"
+                            FontSize="14"
+                            TextColor="White"
+                            FontAttributes="Bold" />
+
+                    </VerticalStackLayout>
+
+
+                    <!-- EMPLOYEE ID -->
+                    <VerticalStackLayout
+                        Grid.Column="1">
+
+                        <Label
+                            Text="EMPLOYEE ID"
+                            FontSize="10"
+                            TextColor="#93C5FD"
+                            FontAttributes="Bold" />
+
+                        <Label
+                            x:Name="EmployeeIdLabel"
+                            Text="-"
+                            FontSize="14"
+                            TextColor="White" />
+
+                    </VerticalStackLayout>
+
+
+                    <!-- DEPARTMENT -->
+                    <VerticalStackLayout
+                        Grid.Column="2">
+
+                        <Label
+                            Text="DEPARTMENT"
+                            FontSize="10"
+                            TextColor="#93C5FD"
+                            FontAttributes="Bold" />
+
+                        <Label
+                            x:Name="DepartmentLabel"
+                            Text="-"
+                            FontSize="14"
+                            TextColor="White" />
+
+                    </VerticalStackLayout>
+
+
+                    <!-- RECORD DATE -->
+                    <VerticalStackLayout
+                        Grid.Column="3">
+
+                        <Label
+                            Text="RECORD DATE"
+                            FontSize="10"
+                            TextColor="#93C5FD"
+                            FontAttributes="Bold" />
+
+                        <DatePicker
+                            x:Name="EntryDatePicker"
+                            Format="dd MMMM yyyy"
+                            TextColor="White"
+                            BackgroundColor="Transparent"
+                            FontSize="14"
+                            HeightRequest="40" />
+
+                    </VerticalStackLayout>
+
+                </Grid>
+
+            </Border>
+
+
+            <!-- =====================================================
+                 DAILY ENTRY FORM
+                 ===================================================== -->
+            <Border
+                BackgroundColor="White"
+                Stroke="#E2E8F0"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 12"
+                Padding="25">
+
+                <VerticalStackLayout
+                    Spacing="20">
+
+
+                    <!-- =================================================
+                         FORM TITLE
+                         ================================================= -->
+                    <VerticalStackLayout
+                        Spacing="4">
+
+                        <Label
+                            x:Name="FormTitleLabel"
+                            Text="Daily Work Activity"
+                            FontSize="20"
+                            FontAttributes="Bold"
+                            TextColor="#0F172A" />
+
+                        <Label
+                            x:Name="FormDescriptionLabel"
+                            Text="Record your work activity."
+                            FontSize="12"
+                            TextColor="#64748B" />
+
+                    </VerticalStackLayout>
+
+
+                    <!-- =================================================
+                         ACTIVITY TYPE
+                         ================================================= -->
+                    <VerticalStackLayout
+                        Spacing="6">
+
+                        <Label
+                            Text="Activity Type *"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#475569" />
+
+                        <Border
+                            BackgroundColor="#F8FAFC"
+                            Stroke="#CBD5E1"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="0">
+
+                            <Picker
+                                x:Name="ActivityTypePicker"
+                                Title="Select activity type"
+                                TitleColor="#64748B"
+                                TextColor="#0F172A"
+                                BackgroundColor="Transparent"
+                                HeightRequest="55"
+                                VerticalOptions="Center"
+                                SelectedIndexChanged="OnActivityTypeChanged" />
+
+                        </Border>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- =================================================
+                         PRIMARY FIELD
+                         ================================================= -->
+                    <VerticalStackLayout
+                        Spacing="6">
+
+                        <Label
+                            x:Name="PrimaryFieldLabel"
+                            Text="Activity Reference *"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#475569" />
+
+                        <Border
+                            BackgroundColor="#F8FAFC"
+                            Stroke="#CBD5E1"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="10,2">
+
+                            <Entry
+                                x:Name="PrimaryFieldEntry"
+                                Placeholder="Enter activity reference"
+                                TextColor="#0F172A"
+                                PlaceholderColor="#94A3B8"
+                                BackgroundColor="Transparent"
+                                HeightRequest="45" />
+
+                        </Border>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- =================================================
+                         QUANTITY + BUSINESS VALUE
+                         ================================================= -->
+                    <Grid
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="15">
+
+                        <!-- QUANTITY -->
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="6">
+
+                            <Label
+                                x:Name="QuantityFieldLabel"
+                                Text="Quantity / Tasks"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,2">
+
+                                <Entry
+                                    x:Name="QuantityFieldEntry"
+                                    Placeholder="Enter quantity"
+                                    Keyboard="Numeric"
+                                    TextColor="#0F172A"
+                                    PlaceholderColor="#94A3B8"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="45" />
+
+                            </Border>
+
+                        </VerticalStackLayout>
+
+
+                        <!-- BUSINESS VALUE -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="6">
+
+                            <Label
+                                x:Name="MonetaryValueLabel"
+                                Text="Business Value (R)"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,2">
+
+                                <Entry
+                                    x:Name="MonetaryValueEntry"
+                                    Placeholder="Enter value if applicable"
+                                    Keyboard="Numeric"
+                                    TextColor="#0F172A"
+                                    PlaceholderColor="#94A3B8"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="45" />
+
+                            </Border>
+
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+
+                    <!-- =================================================
+                         SECONDARY METRIC
+                         ================================================= -->
+                    <VerticalStackLayout
+                        Spacing="6">
+
+                        <Label
+                            x:Name="SecondaryMetricLabel"
+                            Text="Secondary Metric"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#475569" />
+
+                        <Border
+                            BackgroundColor="#F8FAFC"
+                            Stroke="#CBD5E1"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="10,2">
+
+                            <Entry
+                                x:Name="SecondaryMetricEntry"
+                                Placeholder="Enter number if applicable"
+                                Keyboard="Numeric"
+                                TextColor="#0F172A"
+                                PlaceholderColor="#94A3B8"
+                                BackgroundColor="Transparent"
+                                HeightRequest="45" />
+
+                        </Border>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- =================================================
+                         STATUS + BUSINESS IMPACT
+                         ================================================= -->
+                    <Grid
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="15">
+
+                        <!-- WORK STATUS -->
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="6">
+
+                            <Label
+                                Text="Work Status *"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="0">
+
+                                <Picker
+                                    x:Name="StatusPicker"
+                                    Title="Select status"
+                                    TitleColor="#64748B"
+                                    TextColor="#0F172A"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="55"
+                                    VerticalOptions="Center"
+                                    SelectedIndexChanged="OnStatusChanged">
+
+                                    <Picker.Items>
+
+                                        <x:String>Completed</x:String>
+
+                                        <x:String>In Progress</x:String>
+
+                                        <x:String>Pending</x:String>
+
+                                        <x:String>On Hold</x:String>
+
+                                    </Picker.Items>
+
+                                </Picker>
+
+                            </Border>
+
+                        </VerticalStackLayout>
+
+
+                        <!-- BUSINESS IMPACT -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="6">
+
+                            <Label
+                                Text="Business Impact *"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="0">
+
+                                <Picker
+                                    x:Name="ImpactPicker"
+                                    Title="Select impact"
+                                    TitleColor="#64748B"
+                                    TextColor="#0F172A"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="55"
+                                    VerticalOptions="Center"
+                                    SelectedIndexChanged="OnImpactChanged">
+
+                                    <Picker.Items>
+
+                                        <x:String>Low</x:String>
+
+                                        <x:String>Medium</x:String>
+
+                                        <x:String>High</x:String>
+
+                                        <x:String>Critical</x:String>
+
+                                    </Picker.Items>
+
+                                </Picker>
+
+                            </Border>
+
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+
+                    <!-- =================================================
+                         SELECTED VALUES SUMMARY
+                         ================================================= -->
+                    <Border
+                        x:Name="SelectionSummaryBorder"
+                        IsVisible="False"
+                        BackgroundColor="#EFF6FF"
+                        Stroke="#BFDBFE"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="12">
+
+                        <VerticalStackLayout
+                            Spacing="3">
+
+                            <Label
+                                Text="SELECTED OPTIONS"
+                                FontSize="10"
+                                FontAttributes="Bold"
+                                TextColor="#2563EB" />
+
+                            <Label
+                                x:Name="SelectedOptionsLabel"
+                                Text=""
+                                FontSize="12"
+                                TextColor="#0F172A" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+
+                    <!-- =================================================
+                         NOTES
+                         ================================================= -->
+                    <VerticalStackLayout
+                        Spacing="6">
+
+                        <Label
+                            Text="Notes"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#475569" />
+
+                        <Border
+                            BackgroundColor="#F8FAFC"
+                            Stroke="#CBD5E1"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="10">
+
+                            <Editor
+                                x:Name="NotesEditor"
+                                Placeholder="Add any additional information..."
+                                AutoSize="TextChanges"
+                                HeightRequest="100"
+                                TextColor="#0F172A"
+                                PlaceholderColor="#94A3B8"
+                                BackgroundColor="Transparent" />
+
+                        </Border>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- =================================================
+                         VALIDATION MESSAGE
+                         ================================================= -->
+                    <Border
+                        x:Name="ValidationBorder"
+                        IsVisible="False"
+                        BackgroundColor="#FEF2F2"
+                        Stroke="#FECACA"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="12">
+
+                        <Label
+                            x:Name="ValidationLabel"
+                            Text=""
+                            TextColor="#DC2626"
+                            FontSize="11" />
+
+                    </Border>
+
+
+                    <!-- =================================================
+                         BUTTONS
+                         ================================================= -->
+                    <Grid
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="12">
+
+                        <Button
+                            Grid.Column="0"
+                            Text="CLEAR"
+                            HeightRequest="48"
+                            BackgroundColor="#F1F5F9"
+                            TextColor="#475569"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            Clicked="OnClearClicked" />
+
+                        <Button
+                            Grid.Column="1"
+                            Text="SUBMIT RECORD"
+                            HeightRequest="48"
+                            BackgroundColor="#2563EB"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            Clicked="OnSubmitClicked" />
+
+                    </Grid>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+
+            <!-- =====================================================
+                 FOOTER
+                 ===================================================== -->
+            <Label
+                Text="InsightFlow • Employee Work Activity"
+                HorizontalTextAlignment="Center"
+                TextColor="#94A3B8"
+                FontSize="10"
+                Margin="0,5,0,15" />
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

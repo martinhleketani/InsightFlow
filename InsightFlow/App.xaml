@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Application
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="InsightFlow.App">
+
+    <Application.Resources>
+
+        <ResourceDictionary>
+
+            <!-- ================================================= -->
+            <!-- INSIGHTFLOW BRAND COLORS                           -->
+            <!-- ================================================= -->
+
+            <Color x:Key="PrimaryNavy">
+                #0F2747
+            </Color>
+
+            <Color x:Key="PrimaryBlue">
+                #2563EB
+            </Color>
+
+            <Color x:Key="PageBackground">
+                #F8FAFC
+            </Color>
+
+            <Color x:Key="PrimaryText">
+                #0F172A
+            </Color>
+
+            <Color x:Key="SecondaryText">
+                #64748B
+            </Color>
+
+            <Color x:Key="BorderColor">
+                #E2E8F0
+            </Color>
+
+            <Color x:Key="SuccessGreen">
+                #16A34A
+            </Color>
+
+
+            <!-- ================================================= -->
+            <!-- GLOBAL PAGE STYLE                                 -->
+            <!-- ================================================= -->
+
+            <Style TargetType="ContentPage">
+
+                <Setter
+                    Property="BackgroundColor"
+                    Value="{StaticResource PageBackground}" />
+
+            </Style>
+
+
+            <!-- ================================================= -->
+            <!-- GLOBAL LABEL STYLE                                -->
+            <!-- ================================================= -->
+
+            <Style TargetType="Label">
+
+                <Setter
+                    Property="TextColor"
+                    Value="{StaticResource PrimaryText}" />
+
+                <Setter
+                    Property="FontFamily"
+                    Value="OpenSansRegular" />
+
+            </Style>
+
+
+            <!-- ================================================= -->
+            <!-- GLOBAL ENTRY STYLE                                -->
+            <!-- ================================================= -->
+
+            <Style TargetType="Entry">
+
+                <Setter
+                    Property="TextColor"
+                    Value="{StaticResource PrimaryText}" />
+
+                <Setter
+                    Property="PlaceholderColor"
+                    Value="{StaticResource SecondaryText}" />
+
+                <Setter
+                    Property="FontFamily"
+                    Value="OpenSansRegular" />
+
+            </Style>
+
+
+            <!-- ================================================= -->
+            <!-- GLOBAL EDITOR STYLE                               -->
+            <!-- ================================================= -->
+
+            <Style TargetType="Editor">
+
+                <Setter
+                    Property="TextColor"
+                    Value="{StaticResource PrimaryText}" />
+
+                <Setter
+                    Property="PlaceholderColor"
+                    Value="{StaticResource SecondaryText}" />
+
+                <Setter
+                    Property="FontFamily"
+                    Value="OpenSansRegular" />
+
+            </Style>
+
+
+            <!-- ================================================= -->
+            <!-- GLOBAL PICKER STYLE                               -->
+            <!-- ================================================= -->
+
+            <Style TargetType="Picker">
+
+                <Setter
+                    Property="TextColor"
+                    Value="{StaticResource PrimaryText}" />
+
+                <Setter
+                    Property="TitleColor"
+                    Value="{StaticResource SecondaryText}" />
+
+                <Setter
+                    Property="FontFamily"
+                    Value="OpenSansRegular" />
+
+            </Style>
+
+
+            <!-- ================================================= -->
+            <!-- GLOBAL BUTTON STYLE                               -->
+            <!-- ================================================= -->
+
+            <Style TargetType="Button">
+
+                <Setter
+                    Property="FontFamily"
+                    Value="OpenSansSemibold" />
+
+                <Setter
+                    Property="CornerRadius"
+                    Value="8" />
+
+            </Style>
+
+        </ResourceDictionary>
+
+    </Application.Resources>
+
+</Application>

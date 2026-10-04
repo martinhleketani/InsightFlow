@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="InsightFlow.MyEntriesPage"
+    Title="My Entries"
+    BackgroundColor="#F8FAFC">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- HEADER -->
+        <Border
+            Grid.Row="0"
+            BackgroundColor="#0F2747"
+            StrokeThickness="0"
+            Padding="25,18">
+
+            <Grid ColumnDefinitions="Auto,*,Auto"
+                  ColumnSpacing="15">
+
+                <Button
+                    Grid.Column="0"
+                    Text="← Back"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    Clicked="OnBackClicked" />
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Spacing="2">
+
+                    <Label
+                        Text="MY ENTRIES"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="White" />
+
+                    <Label
+                        Text="Your submitted daily work records"
+                        FontSize="11"
+                        TextColor="#93C5FD" />
+
+                </VerticalStackLayout>
+
+                <Button
+                    Grid.Column="2"
+                    Text="REFRESH"
+                    BackgroundColor="#2563EB"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    Clicked="OnRefreshClicked" />
+
+            </Grid>
+
+        </Border>
+
+
+        <!-- CONTENT -->
+        <Grid
+            Grid.Row="1"
+            Padding="25"
+            RowDefinitions="Auto,Auto,*"
+            RowSpacing="18">
+
+            <!-- SUMMARY CARDS -->
+            <Grid
+                Grid.Row="0"
+                ColumnDefinitions="*,*,*,*"
+                ColumnSpacing="15">
+
+                <!-- TOTAL -->
+                <Border
+                    Grid.Column="0"
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="18">
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="TOTAL ENTRIES"
+                            FontSize="10"
+                            FontAttributes="Bold"
+                            TextColor="#64748B" />
+
+                        <Label
+                            x:Name="TotalEntriesLabel"
+                            Text="0"
+                            FontSize="26"
+                            FontAttributes="Bold"
+                            TextColor="#0F172A" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <!-- COMPLETED -->
+                <Border
+                    Grid.Column="1"
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="18">
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="COMPLETED"
+                            FontSize="10"
+                            FontAttributes="Bold"
+                            TextColor="#64748B" />
+
+                        <Label
+                            x:Name="CompletedEntriesLabel"
+                            Text="0"
+                            FontSize="26"
+                            FontAttributes="Bold"
+                            TextColor="#16A34A" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <!-- IN PROGRESS -->
+                <Border
+                    Grid.Column="2"
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="18">
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="IN PROGRESS"
+                            FontSize="10"
+                            FontAttributes="Bold"
+                            TextColor="#64748B" />
+
+                        <Label
+                            x:Name="InProgressEntriesLabel"
+                            Text="0"
+                            FontSize="26"
+                            FontAttributes="Bold"
+                            TextColor="#2563EB" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <!-- BUSINESS VALUE -->
+                <Border
+                    Grid.Column="3"
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="18">
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="BUSINESS VALUE"
+                            FontSize="10"
+                            FontAttributes="Bold"
+                            TextColor="#64748B" />
+
+                        <Label
+                            x:Name="TotalBusinessValueLabel"
+                            Text="R 0.00"
+                            FontSize="24"
+                            FontAttributes="Bold"
+                            TextColor="#0F172A" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+            </Grid>
+
+
+            <!-- SEARCH / FILTER -->
+            <Border
+                Grid.Row="1"
+                BackgroundColor="White"
+                Stroke="#E2E8F0"
+                StrokeShape="RoundRectangle 12"
+                Padding="15">
+
+                <Grid
+                    ColumnDefinitions="2*,*,Auto"
+                    ColumnSpacing="12">
+
+                    <Border
+                        Grid.Column="0"
+                        BackgroundColor="#F8FAFC"
+                        Stroke="#CBD5E1"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="10,2">
+
+                        <Entry
+                            x:Name="SearchEntry"
+                            Placeholder="Search activity, reference or notes..."
+                            TextColor="#0F172A"
+                            PlaceholderColor="#94A3B8"
+                            TextChanged="OnSearchTextChanged" />
+
+                    </Border>
+
+
+                    <Border
+                        Grid.Column="1"
+                        BackgroundColor="#F8FAFC"
+                        Stroke="#CBD5E1"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="10,2">
+
+                        <Picker
+                            x:Name="StatusFilterPicker"
+                            Title="Status"
+                            SelectedIndexChanged="OnStatusFilterChanged">
+
+                            <Picker.Items>
+
+                                <x:String>All</x:String>
+
+                                <x:String>Completed</x:String>
+
+                                <x:String>In Progress</x:String>
+
+                                <x:String>Pending</x:String>
+
+                                <x:String>On Hold</x:String>
+
+                            </Picker.Items>
+
+                        </Picker>
+
+                    </Border>
+
+
+                    <ActivityIndicator
+                        Grid.Column="2"
+                        x:Name="LoadingIndicator"
+                        IsVisible="False"
+                        IsRunning="False"
+                        Color="#2563EB"
+                        WidthRequest="35"
+                        HeightRequest="35" />
+
+                </Grid>
+
+            </Border>
+
+
+            <!-- RECORD LIST -->
+            <Border
+                Grid.Row="2"
+                BackgroundColor="White"
+                Stroke="#E2E8F0"
+                StrokeShape="RoundRectangle 12"
+                Padding="20">
+
+                <Grid RowDefinitions="Auto,*">
+
+                    <Grid
+                        Grid.Row="0"
+                        ColumnDefinitions="*,Auto"
+                        Margin="0,0,0,15">
+
+                        <VerticalStackLayout Spacing="2">
+
+                            <Label
+                                Text="Daily Work Records"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                x:Name="RecordCountLabel"
+                                Text="0 records"
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+
+                    <CollectionView
+                        Grid.Row="1"
+                        x:Name="EntriesCollectionView"
+                        SelectionMode="None">
+
+                        <CollectionView.EmptyView>
+
+                            <VerticalStackLayout
+                                Padding="40"
+                                Spacing="8"
+                                VerticalOptions="Center">
+
+                                <Label
+                                    Text="No daily records found"
+                                    FontSize="17"
+                                    FontAttributes="Bold"
+                                    TextColor="#64748B"
+                                    HorizontalTextAlignment="Center" />
+
+                                <Label
+                                    Text="Your submitted daily activities will appear here."
+                                    FontSize="11"
+                                    TextColor="#94A3B8"
+                                    HorizontalTextAlignment="Center" />
+
+                            </VerticalStackLayout>
+
+                        </CollectionView.EmptyView>
+
+
+                        <CollectionView.ItemTemplate>
+
+                            <DataTemplate>
+
+                                <Border
+                                    Margin="0,0,0,12"
+                                    Padding="16"
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeShape="RoundRectangle 10">
+
+                                    <Grid
+                                        ColumnDefinitions="2*,*,*,Auto"
+                                        RowDefinitions="Auto,Auto,Auto"
+                                        ColumnSpacing="15"
+                                        RowSpacing="5">
+
+                                        <!-- ACTIVITY -->
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Text="{Binding ActivityType}"
+                                            FontSize="14"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <!-- DATE -->
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Text="{Binding DateDisplay}"
+                                            FontSize="10"
+                                            TextColor="#64748B" />
+
+                                        <!-- VALUE -->
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            Text="{Binding BusinessValueDisplay}"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <!-- STATUS -->
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="3"
+                                            Text="{Binding Status}"
+                                            FontSize="10"
+                                            FontAttributes="Bold"
+                                            TextColor="#2563EB"
+                                            HorizontalTextAlignment="End" />
+
+
+                                        <!-- REFERENCE -->
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            Text="{Binding ReferenceDisplay}"
+                                            FontSize="10"
+                                            TextColor="#475569" />
+
+                                        <!-- QUANTITY -->
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            Text="{Binding QuantityDisplay}"
+                                            FontSize="10"
+                                            TextColor="#64748B" />
+
+                                        <!-- IMPACT -->
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="3"
+                                            Text="{Binding BusinessImpact}"
+                                            FontSize="10"
+                                            TextColor="#64748B"
+                                            HorizontalTextAlignment="End" />
+
+
+                                        <!-- NOTES -->
+                                        <Label
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="4"
+                                            Text="{Binding NotesDisplay}"
+                                            FontSize="10"
+                                            TextColor="#94A3B8"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="2" />
+
+                                    </Grid>
+
+                                </Border>
+
+                            </DataTemplate>
+
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
+
+                </Grid>
+
+            </Border>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

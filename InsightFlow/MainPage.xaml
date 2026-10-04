@@ -1,0 +1,383 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="InsightFlow.MainPage"
+    BackgroundColor="#F8FAFC"
+    NavigationPage.HasNavigationBar="False">
+
+    <Grid ColumnDefinitions="1.05*,0.95*">
+
+        <!-- ====================================================== -->
+        <!-- LEFT SIDE: INSIGHTFLOW BRANDING                        -->
+        <!-- ====================================================== -->
+
+        <Grid
+            Grid.Column="0"
+            BackgroundColor="#0F2747"
+            Padding="60">
+
+            <VerticalStackLayout
+                VerticalOptions="Center"
+                Spacing="20">
+
+                <Label
+                    Text="MARTIN"
+                    FontSize="13"
+                    FontAttributes="Bold"
+                    CharacterSpacing="4"
+                    TextColor="#93C5FD" />
+
+                <Label
+                    Text="INSIGHTFLOW"
+                    FontSize="42"
+                    FontAttributes="Bold"
+                    CharacterSpacing="2"
+                    TextColor="White" />
+
+                <Label
+                    Text="Company Performance &amp; Business Intelligence"
+                    FontSize="19"
+                    TextColor="#DBEAFE" />
+
+                <BoxView
+                    WidthRequest="75"
+                    HeightRequest="4"
+                    HorizontalOptions="Start"
+                    BackgroundColor="#2563EB"
+                    Margin="0,5,0,5" />
+
+                <Label
+                    Text="A secure internal platform that connects employee activity with meaningful business intelligence."
+                    FontSize="14"
+                    TextColor="#CBD5E1"
+                    MaximumWidthRequest="500"
+                    LineBreakMode="WordWrap" />
+
+                <VerticalStackLayout
+                    Margin="0,20,0,0"
+                    Spacing="12">
+
+                    <Label
+                        Text="✓  Record daily business activity"
+                        FontSize="13"
+                        TextColor="White" />
+
+                    <Label
+                        Text="✓  Monitor department performance"
+                        FontSize="13"
+                        TextColor="White" />
+
+                    <Label
+                        Text="✓  Analyse company performance"
+                        FontSize="13"
+                        TextColor="White" />
+
+                    <Label
+                        Text="✓  Generate forecasts and reports"
+                        FontSize="13"
+                        TextColor="White" />
+
+                </VerticalStackLayout>
+
+                <Label
+                    Text="Secure • Internal • Data-driven"
+                    Margin="0,25,0,0"
+                    FontSize="11"
+                    TextColor="#94A3B8" />
+
+            </VerticalStackLayout>
+
+        </Grid>
+
+
+        <!-- ====================================================== -->
+        <!-- RIGHT SIDE: LOGIN                                      -->
+        <!-- ====================================================== -->
+
+        <Grid
+            Grid.Column="1"
+            Padding="50"
+            BackgroundColor="#F8FAFC">
+
+            <Border
+                MaximumWidthRequest="470"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                BackgroundColor="White"
+                Stroke="#E2E8F0"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 16"
+                Padding="38">
+
+                <VerticalStackLayout Spacing="18">
+
+                    <!-- COMPANY ACCESS -->
+
+                    <Border
+                        BackgroundColor="#EFF6FF"
+                        Stroke="#DBEAFE"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="10">
+
+                        <HorizontalStackLayout
+                            HorizontalOptions="Center"
+                            Spacing="7">
+
+                            <Label
+                                Text="●"
+                                FontSize="10"
+                                TextColor="#16A34A"
+                                VerticalOptions="Center" />
+
+                            <Label
+                                Text="AUTHORIZED COMPANY ACCESS"
+                                FontSize="10"
+                                FontAttributes="Bold"
+                                TextColor="#2563EB"
+                                VerticalOptions="Center" />
+
+                        </HorizontalStackLayout>
+
+                    </Border>
+
+
+                    <!-- TITLE -->
+
+                    <VerticalStackLayout Spacing="5">
+
+                        <Label
+                            Text="Sign in"
+                            FontSize="28"
+                            FontAttributes="Bold"
+                            TextColor="#0F172A" />
+
+                        <Label
+                            Text="Enter your approved employee credentials."
+                            FontSize="13"
+                            TextColor="#64748B" />
+
+                    </VerticalStackLayout>
+
+
+                    <!-- COMPANY EMAIL -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="Company Email"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#475569" />
+
+                        <Border
+                            BackgroundColor="#F8FAFC"
+                            Stroke="#CBD5E1"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="12,2">
+
+                            <Entry
+                                x:Name="EmailEntry"
+                                Placeholder="name@insightflow.co.za"
+                                Keyboard="Email"
+                                FontSize="13"
+                                TextColor="#0F172A"
+                                PlaceholderColor="#94A3B8"
+                                HeightRequest="44" />
+
+                        </Border>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- EMPLOYEE ID -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="Employee ID"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#475569" />
+
+                        <Border
+                            BackgroundColor="#F8FAFC"
+                            Stroke="#CBD5E1"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="12,2">
+
+                            <Entry
+                                x:Name="EmployeeIdEntry"
+                                Placeholder="e.g. IF-SAL-0001"
+                                FontSize="13"
+                                CharacterSpacing="1"
+                                TextColor="#0F172A"
+                                PlaceholderColor="#94A3B8"
+                                HeightRequest="44" />
+
+                        </Border>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- PASSWORD -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="Password"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#475569" />
+
+                        <Border
+                            BackgroundColor="#F8FAFC"
+                            Stroke="#CBD5E1"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="12,2">
+
+                            <Grid ColumnDefinitions="*,Auto">
+
+                                <Entry
+                                    x:Name="PasswordEntry"
+                                    Grid.Column="0"
+                                    Placeholder="Enter your password"
+                                    IsPassword="True"
+                                    FontSize="13"
+                                    TextColor="#0F172A"
+                                    PlaceholderColor="#94A3B8"
+                                    HeightRequest="44" />
+
+                                <Button
+                                    x:Name="ShowPasswordButton"
+                                    Grid.Column="1"
+                                    Text="Show"
+                                    BackgroundColor="Transparent"
+                                    TextColor="#2563EB"
+                                    FontSize="11"
+                                    FontAttributes="Bold"
+                                    Padding="10,0"
+                                    Clicked="OnShowPasswordClicked" />
+
+                            </Grid>
+
+                        </Border>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- REMEMBER / FORGOT PASSWORD -->
+
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <HorizontalStackLayout
+                            Grid.Column="0"
+                            Spacing="5">
+
+                            <CheckBox
+                                x:Name="RememberEmployeeCheckBox"
+                                Color="#2563EB"
+                                VerticalOptions="Center" />
+
+                            <Label
+                                Text="Remember Employee ID"
+                                FontSize="11"
+                                TextColor="#475569"
+                                VerticalOptions="Center" />
+
+                        </HorizontalStackLayout>
+
+                        <Button
+                            Grid.Column="1"
+                            Text="Forgot password?"
+                            BackgroundColor="Transparent"
+                            TextColor="#2563EB"
+                            FontSize="11"
+                            FontAttributes="Bold"
+                            Padding="5,0"
+                            Clicked="OnForgotPasswordClicked" />
+
+                    </Grid>
+
+
+                    <!-- LOGIN ERROR -->
+
+                    <Border
+                        x:Name="LoginErrorBorder"
+                        IsVisible="False"
+                        BackgroundColor="#FEF2F2"
+                        Stroke="#FECACA"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="10">
+
+                        <Label
+                            x:Name="LoginStatusLabel"
+                            Text=""
+                            FontSize="11"
+                            TextColor="#DC2626"
+                            HorizontalTextAlignment="Center" />
+
+                    </Border>
+
+
+                    <!-- SIGN IN -->
+
+                    <Button
+                        x:Name="SignInButton"
+                        Text="SIGN IN"
+                        HeightRequest="50"
+                        BackgroundColor="#2563EB"
+                        TextColor="White"
+                        FontSize="13"
+                        FontAttributes="Bold"
+                        CornerRadius="8"
+                        Clicked="OnLoginClicked" />
+
+
+                    <!-- SECURITY NOTICE -->
+
+                    <Border
+                        BackgroundColor="#F8FAFC"
+                        Stroke="#E2E8F0"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="12">
+
+                        <VerticalStackLayout Spacing="4">
+
+                            <Label
+                                Text="SECURE INTERNAL SYSTEM"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B"
+                                HorizontalTextAlignment="Center" />
+
+                            <Label
+                                Text="Only active employees with approved company credentials can access InsightFlow."
+                                FontSize="9"
+                                TextColor="#94A3B8"
+                                HorizontalTextAlignment="Center"
+                                LineBreakMode="WordWrap" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+
+                    <!-- FOOTER -->
+
+                    <Label
+                        Text="InsightFlow • Company Employee Portal"
+                        FontSize="9"
+                        TextColor="#94A3B8"
+                        HorizontalTextAlignment="Center" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

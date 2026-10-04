@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="InsightFlow.ForecastingPage"
+    Title="Forecasting"
+    BackgroundColor="#F8FAFC">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- HEADER -->
+        <Border
+            Grid.Row="0"
+            BackgroundColor="#0F2747"
+            StrokeThickness="0"
+            Padding="25,18">
+
+            <Grid ColumnDefinitions="Auto,*,Auto"
+                  ColumnSpacing="15">
+
+                <Button
+                    Grid.Column="0"
+                    Text="← Back"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    Clicked="OnBackClicked" />
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Spacing="3">
+
+                    <Label
+                        Text="FORECASTING"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="White" />
+
+                    <Label
+                        Text="Historical trends and moving-average forecasts"
+                        FontSize="11"
+                        TextColor="#93C5FD" />
+
+                </VerticalStackLayout>
+
+                <Button
+                    Grid.Column="2"
+                    Text="REFRESH"
+                    BackgroundColor="#2563EB"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    Clicked="OnRefreshClicked" />
+
+            </Grid>
+
+        </Border>
+
+
+        <ScrollView Grid.Row="1">
+
+            <VerticalStackLayout
+                Padding="25"
+                Spacing="20">
+
+                <!-- PAGE TITLE -->
+                <Grid ColumnDefinitions="*,Auto">
+
+                    <VerticalStackLayout
+                        Grid.Column="0"
+                        Spacing="3">
+
+                        <Label
+                            Text="Business Forecast Overview"
+                            FontSize="21"
+                            FontAttributes="Bold"
+                            TextColor="#0F172A" />
+
+                        <Label
+                            x:Name="LastUpdatedLabel"
+                            Text="Waiting for historical records"
+                            FontSize="11"
+                            TextColor="#64748B" />
+
+                    </VerticalStackLayout>
+
+                    <ActivityIndicator
+                        Grid.Column="1"
+                        x:Name="LoadingIndicator"
+                        IsVisible="False"
+                        IsRunning="False"
+                        Color="#2563EB"
+                        WidthRequest="35"
+                        HeightRequest="35" />
+
+                </Grid>
+
+
+                <!-- ERROR -->
+                <Border
+                    x:Name="ErrorBorder"
+                    IsVisible="False"
+                    BackgroundColor="#FEF2F2"
+                    Stroke="#FECACA"
+                    StrokeShape="RoundRectangle 8"
+                    Padding="12">
+
+                    <Label
+                        x:Name="ErrorLabel"
+                        FontSize="11"
+                        TextColor="#DC2626" />
+
+                </Border>
+
+
+                <!-- FILTER -->
+                <Border
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="18">
+
+                    <Grid
+                        ColumnDefinitions="*,*,Auto"
+                        ColumnSpacing="15">
+
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="5">
+
+                            <Label
+                                Text="Department"
+                                FontSize="10"
+                                FontAttributes="Bold"
+                                TextColor="#64748B" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="8,0">
+
+                                <Picker
+                                    x:Name="DepartmentPicker"
+                                    SelectedIndexChanged="OnDepartmentChanged">
+
+                                    <Picker.Items>
+
+                                        <x:String>All Departments</x:String>
+                                        <x:String>Sales</x:String>
+                                        <x:String>Finance</x:String>
+                                        <x:String>Human Resources</x:String>
+                                        <x:String>Information Technology</x:String>
+                                        <x:String>Marketing</x:String>
+                                        <x:String>Operations</x:String>
+                                        <x:String>Customer Service</x:String>
+                                        <x:String>Procurement</x:String>
+                                        <x:String>Management</x:String>
+
+                                    </Picker.Items>
+
+                                </Picker>
+
+                            </Border>
+
+                        </VerticalStackLayout>
+
+
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="5">
+
+                            <Label
+                                Text="Forecast Method"
+                                FontSize="10"
+                                FontAttributes="Bold"
+                                TextColor="#64748B" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="8,0">
+
+                                <Picker
+                                    x:Name="ForecastMethodPicker"
+                                    SelectedIndexChanged="OnForecastMethodChanged">
+
+                                    <Picker.Items>
+
+                                        <x:String>3-Month Moving Average</x:String>
+                                        <x:String>2-Month Moving Average</x:String>
+
+                                    </Picker.Items>
+
+                                </Picker>
+
+                            </Border>
+
+                        </VerticalStackLayout>
+
+
+                        <Button
+                            Grid.Column="2"
+                            Text="CALCULATE"
+                            BackgroundColor="#0F2747"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            VerticalOptions="End"
+                            Clicked="OnCalculateClicked" />
+
+                    </Grid>
+
+                </Border>
+
+
+                <!-- KPI -->
+                <Grid
+                    ColumnDefinitions="*,*,*,*"
+                    ColumnSpacing="15">
+
+                    <!-- HISTORY -->
+                    <Border
+                        Grid.Column="0"
+                        BackgroundColor="White"
+                        Stroke="#E2E8F0"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="18">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <Label
+                                Text="HISTORY"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B" />
+
+                            <Label
+                                x:Name="HistoryMonthsLabel"
+                                Text="0 months"
+                                FontSize="23"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Months with records"
+                                FontSize="9"
+                                TextColor="#94A3B8" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+
+                    <!-- CURRENT VALUE -->
+                    <Border
+                        Grid.Column="1"
+                        BackgroundColor="White"
+                        Stroke="#E2E8F0"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="18">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <Label
+                                Text="LATEST MONTH VALUE"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B" />
+
+                            <Label
+                                x:Name="LatestMonthValueLabel"
+                                Text="R 0.00"
+                                FontSize="23"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                x:Name="LatestMonthLabel"
+                                Text="No historical month"
+                                FontSize="9"
+                                TextColor="#94A3B8" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+
+                    <!-- FORECAST -->
+                    <Border
+                        Grid.Column="2"
+                        BackgroundColor="White"
+                        Stroke="#BFDBFE"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="18">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <Label
+                                Text="NEXT MONTH FORECAST"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#2563EB" />
+
+                            <Label
+                                x:Name="ForecastValueLabel"
+                                Text="R 0.00"
+                                FontSize="23"
+                                FontAttributes="Bold"
+                                TextColor="#2563EB" />
+
+                            <Label
+                                x:Name="ForecastMonthLabel"
+                                Text="Insufficient history"
+                                FontSize="9"
+                                TextColor="#64748B" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+
+                    <!-- ACTIVITY FORECAST -->
+                    <Border
+                        Grid.Column="3"
+                        BackgroundColor="White"
+                        Stroke="#E2E8F0"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="18">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <Label
+                                Text="ACTIVITY FORECAST"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B" />
+
+                            <Label
+                                x:Name="ForecastActivityLabel"
+                                Text="0"
+                                FontSize="23"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Expected record volume"
+                                FontSize="9"
+                                TextColor="#94A3B8" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </Grid>
+
+
+                <!-- SECONDARY METRICS -->
+                <Grid
+                    ColumnDefinitions="*,*,*"
+                    ColumnSpacing="15">
+
+                    <Border
+                        Grid.Column="0"
+                        BackgroundColor="White"
+                        Stroke="#E2E8F0"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="18">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <Label
+                                Text="HISTORICAL VALUE"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B" />
+
+                            <Label
+                                x:Name="HistoricalValueLabel"
+                                Text="R 0.00"
+                                FontSize="22"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Total recorded value"
+                                FontSize="9"
+                                TextColor="#94A3B8" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+
+                    <Border
+                        Grid.Column="1"
+                        BackgroundColor="White"
+                        Stroke="#E2E8F0"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="18">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <Label
+                                Text="HISTORICAL ACTIVITIES"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B" />
+
+                            <Label
+                                x:Name="HistoricalActivitiesLabel"
+                                Text="0"
+                                FontSize="22"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Records in selected data"
+                                FontSize="9"
+                                TextColor="#94A3B8" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+
+                    <Border
+                        Grid.Column="2"
+                        BackgroundColor="White"
+                        Stroke="#E2E8F0"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="18">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <Label
+                                Text="AVERAGE MONTHLY VALUE"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B" />
+
+                            <Label
+                                x:Name="AverageMonthlyValueLabel"
+                                Text="R 0.00"
+                                FontSize="22"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Average across history"
+                                FontSize="9"
+                                TextColor="#94A3B8" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </Grid>
+
+
+                <!-- FORECAST EXPLANATION -->
+                <Border
+                    BackgroundColor="#EFF6FF"
+                    Stroke="#BFDBFE"
+                    StrokeShape="RoundRectangle 10"
+                    Padding="15">
+
+                    <VerticalStackLayout Spacing="5">
+
+                        <Label
+                            Text="Forecast Method"
+                            FontSize="11"
+                            FontAttributes="Bold"
+                            TextColor="#1E40AF" />
+
+                        <Label
+                            x:Name="ForecastExplanationLabel"
+                            Text="The next month forecast is calculated using the average of the latest three months of historical data."
+                            FontSize="10"
+                            TextColor="#1E40AF" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <!-- MONTHLY HISTORY TABLE -->
+                <Border
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20">
+
+                    <Grid RowDefinitions="Auto,Auto,*">
+
+                        <VerticalStackLayout
+                            Grid.Row="0"
+                            Spacing="3"
+                            Margin="0,0,0,15">
+
+                            <Label
+                                Text="Monthly Historical Trend"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Actual historical values calculated from employee records"
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                        </VerticalStackLayout>
+
+
+                        <!-- HEADERS -->
+                        <Grid
+                            Grid.Row="1"
+                            ColumnDefinitions="1.2*,*,*,*,*"
+                            ColumnSpacing="12"
+                            Padding="12"
+                            BackgroundColor="#F1F5F9">
+
+                            <Label
+                                Grid.Column="0"
+                                Text="MONTH"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Column="1"
+                                Text="ACTIVITIES"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B"
+                                HorizontalTextAlignment="Center" />
+
+                            <Label
+                                Grid.Column="2"
+                                Text="QUANTITY"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B"
+                                HorizontalTextAlignment="Center" />
+
+                            <Label
+                                Grid.Column="3"
+                                Text="BUSINESS VALUE"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B"
+                                HorizontalTextAlignment="End" />
+
+                            <Label
+                                Grid.Column="4"
+                                Text="COMPLETED"
+                                FontSize="9"
+                                FontAttributes="Bold"
+                                TextColor="#64748B"
+                                HorizontalTextAlignment="Center" />
+
+                        </Grid>
+
+
+                        <CollectionView
+                            Grid.Row="2"
+                            x:Name="MonthlyHistoryCollectionView"
+                            SelectionMode="None"
+                            HeightRequest="400">
+
+                            <CollectionView.EmptyView>
+
+                                <VerticalStackLayout
+                                    Padding="30"
+                                    Spacing="8">
+
+                                    <Label
+                                        Text="No historical data available"
+                                        FontSize="15"
+                                        FontAttributes="Bold"
+                                        TextColor="#64748B"
+                                        HorizontalTextAlignment="Center" />
+
+                                    <Label
+                                        Text="Forecasting requires employee records with historical dates."
+                                        FontSize="10"
+                                        TextColor="#94A3B8"
+                                        HorizontalTextAlignment="Center" />
+
+                                </VerticalStackLayout>
+
+                            </CollectionView.EmptyView>
+
+
+                            <CollectionView.ItemTemplate>
+
+                                <DataTemplate>
+
+                                    <Border
+                                        Margin="0,6,0,0"
+                                        Padding="12"
+                                        BackgroundColor="#F8FAFC"
+                                        Stroke="#E2E8F0"
+                                        StrokeShape="RoundRectangle 8">
+
+                                        <Grid
+                                            ColumnDefinitions="1.2*,*,*,*,*"
+                                            ColumnSpacing="12">
+
+                                            <Label
+                                                Grid.Column="0"
+                                                Text="{Binding MonthDisplay}"
+                                                FontSize="11"
+                                                FontAttributes="Bold"
+                                                TextColor="#0F172A" />
+
+                                            <Label
+                                                Grid.Column="1"
+                                                Text="{Binding ActivityCountDisplay}"
+                                                FontSize="11"
+                                                TextColor="#0F172A"
+                                                HorizontalTextAlignment="Center" />
+
+                                            <Label
+                                                Grid.Column="2"
+                                                Text="{Binding QuantityDisplay}"
+                                                FontSize="11"
+                                                TextColor="#0F172A"
+                                                HorizontalTextAlignment="Center" />
+
+                                            <Label
+                                                Grid.Column="3"
+                                                Text="{Binding BusinessValueDisplay}"
+                                                FontSize="11"
+                                                FontAttributes="Bold"
+                                                TextColor="#0F172A"
+                                                HorizontalTextAlignment="End" />
+
+                                            <Label
+                                                Grid.Column="4"
+                                                Text="{Binding CompletedDisplay}"
+                                                FontSize="11"
+                                                FontAttributes="Bold"
+                                                TextColor="#16A34A"
+                                                HorizontalTextAlignment="Center" />
+
+                                        </Grid>
+
+                                    </Border>
+
+                                </DataTemplate>
+
+                            </CollectionView.ItemTemplate>
+
+                        </CollectionView>
+
+                    </Grid>
+
+                </Border>
+
+
+                <!-- FORECAST DETAIL -->
+                <Border
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20">
+
+                    <VerticalStackLayout Spacing="15">
+
+                        <Label
+                            Text="Forecast Calculation"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            TextColor="#0F172A" />
+
+
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <Label
+                                Text="Method"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Column="1"
+                                x:Name="MethodDisplayLabel"
+                                Text="3-Month Moving Average"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                        </Grid>
+
+
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <Label
+                                Text="Historical months used"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Column="1"
+                                x:Name="MonthsUsedLabel"
+                                Text="0"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                        </Grid>
+
+
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <Label
+                                Text="Forecast business value"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Column="1"
+                                x:Name="ForecastDetailValueLabel"
+                                Text="R 0.00"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#2563EB" />
+
+                        </Grid>
+
+
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <Label
+                                Text="Forecast activity volume"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Column="1"
+                                x:Name="ForecastDetailActivityLabel"
+                                Text="0"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#2563EB" />
+
+                        </Grid>
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <!-- DISCLAIMER -->
+                <Border
+                    BackgroundColor="#FFFBEB"
+                    Stroke="#FDE68A"
+                    StrokeShape="RoundRectangle 10"
+                    Padding="15">
+
+                    <Label
+                        Text="Forecasts are estimates based on historical employee submissions. They are not guaranteed future results and should be interpreted together with business context."
+                        FontSize="10"
+                        TextColor="#92400E" />
+
+                </Border>
+
+
+                <Label
+                    Text="InsightFlow • Business Forecasting"
+                    FontSize="9"
+                    TextColor="#94A3B8"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,0,0,15" />
+
+            </VerticalStackLayout>
+
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>

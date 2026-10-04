@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="InsightFlow.EmployeeManagementPage"
+    Title="Employee Management"
+    BackgroundColor="#F8FAFC">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- HEADER -->
+        <Border
+            Grid.Row="0"
+            BackgroundColor="#0F2747"
+            StrokeThickness="0"
+            Padding="25,18">
+
+            <Grid ColumnDefinitions="Auto,*,Auto"
+                  ColumnSpacing="15">
+
+                <Button
+                    Grid.Column="0"
+                    Text="← Back"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    Clicked="OnBackClicked" />
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Spacing="2">
+
+                    <Label
+                        Text="EMPLOYEE MANAGEMENT"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="White" />
+
+                    <Label
+                        Text="Manage InsightFlow employee accounts"
+                        FontSize="11"
+                        TextColor="#93C5FD" />
+
+                </VerticalStackLayout>
+
+                <Button
+                    Grid.Column="2"
+                    Text="REFRESH"
+                    BackgroundColor="#2563EB"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    Clicked="OnRefreshClicked" />
+
+            </Grid>
+
+        </Border>
+
+
+        <!-- CONTENT -->
+        <Grid
+            Grid.Row="1"
+            ColumnDefinitions="380,*"
+            ColumnSpacing="20"
+            Padding="25">
+
+
+            <!-- ================================================= -->
+            <!-- LEFT: EMPLOYEE FORM -->
+            <!-- ================================================= -->
+
+            <ScrollView Grid.Column="0">
+
+                <VerticalStackLayout Spacing="15">
+
+                    <Border
+                        BackgroundColor="White"
+                        Stroke="#E2E8F0"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="20">
+
+                        <VerticalStackLayout Spacing="14">
+
+                            <Label
+                                x:Name="FormTitleLabel"
+                                Text="Add Employee"
+                                FontSize="19"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Create or update an employee account."
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+
+                            <!-- EMPLOYEE ID -->
+
+                            <Label
+                                Text="Employee ID *"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,2">
+
+                                <Entry
+                                    x:Name="EmployeeIdEntry"
+                                    Placeholder="e.g. IF-SAL-0001"
+                                    TextColor="#0F172A"
+                                    PlaceholderColor="#94A3B8" />
+
+                            </Border>
+
+
+                            <!-- FIRST NAME -->
+
+                            <Label
+                                Text="First Name *"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,2">
+
+                                <Entry
+                                    x:Name="FirstNameEntry"
+                                    Placeholder="First name"
+                                    TextColor="#0F172A"
+                                    PlaceholderColor="#94A3B8" />
+
+                            </Border>
+
+
+                            <!-- LAST NAME -->
+
+                            <Label
+                                Text="Last Name *"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,2">
+
+                                <Entry
+                                    x:Name="LastNameEntry"
+                                    Placeholder="Last name"
+                                    TextColor="#0F172A"
+                                    PlaceholderColor="#94A3B8" />
+
+                            </Border>
+
+
+                            <!-- EMAIL -->
+
+                            <Label
+                                Text="Company Email *"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,2">
+
+                                <Entry
+                                    x:Name="CompanyEmailEntry"
+                                    Placeholder="name@insightflow.co.za"
+                                    Keyboard="Email"
+                                    TextColor="#0F172A"
+                                    PlaceholderColor="#94A3B8" />
+
+                            </Border>
+
+
+                            <!-- DEPARTMENT -->
+
+                            <Label
+                                Text="Department *"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,2">
+
+                                <Picker
+                                    x:Name="DepartmentPicker"
+                                    Title="Select department"
+                                    SelectedIndexChanged="OnDepartmentChanged">
+
+                                    <Picker.Items>
+
+                                        <x:String>Sales</x:String>
+
+                                        <x:String>Finance</x:String>
+
+                                        <x:String>Human Resources</x:String>
+
+                                        <x:String>Information Technology</x:String>
+
+                                        <x:String>Marketing</x:String>
+
+                                        <x:String>Operations</x:String>
+
+                                        <x:String>Customer Service</x:String>
+
+                                        <x:String>Procurement</x:String>
+
+                                        <x:String>Management</x:String>
+
+                                    </Picker.Items>
+
+                                </Picker>
+
+                            </Border>
+
+
+                            <!-- JOB TITLE -->
+
+                            <Label
+                                Text="Job Title *"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,2">
+
+                                <Entry
+                                    x:Name="JobTitleEntry"
+                                    Placeholder="Employee job title"
+                                    TextColor="#0F172A"
+                                    PlaceholderColor="#94A3B8" />
+
+                            </Border>
+
+
+                            <!-- ROLE -->
+
+                            <Label
+                                Text="System Role *"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,2">
+
+                                <Picker
+                                    x:Name="RolePicker"
+                                    Title="Select role">
+
+                                    <Picker.Items>
+
+                                        <x:String>Employee</x:String>
+
+                                        <x:String>Manager</x:String>
+
+                                        <x:String>Administrator</x:String>
+
+                                    </Picker.Items>
+
+                                </Picker>
+
+                            </Border>
+
+
+                            <!-- PASSWORD -->
+
+                            <Label
+                                x:Name="PasswordLabel"
+                                Text="Initial Password *"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#475569" />
+
+                            <Border
+                                x:Name="PasswordBorder"
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,2">
+
+                                <Entry
+                                    x:Name="PasswordEntry"
+                                    Placeholder="Initial password"
+                                    IsPassword="True"
+                                    TextColor="#0F172A"
+                                    PlaceholderColor="#94A3B8" />
+
+                            </Border>
+
+
+                            <!-- STATUS -->
+
+                            <Grid ColumnDefinitions="*,Auto">
+
+                                <VerticalStackLayout
+                                    Grid.Column="0"
+                                    Spacing="2">
+
+                                    <Label
+                                        Text="Account Active"
+                                        FontSize="11"
+                                        FontAttributes="Bold"
+                                        TextColor="#475569" />
+
+                                    <Label
+                                        Text="Allow employee to access InsightFlow"
+                                        FontSize="9"
+                                        TextColor="#94A3B8" />
+
+                                </VerticalStackLayout>
+
+                                <Switch
+                                    Grid.Column="1"
+                                    x:Name="ActiveSwitch"
+                                    IsToggled="True" />
+
+                            </Grid>
+
+
+                            <!-- VALIDATION -->
+
+                            <Border
+                                x:Name="ValidationBorder"
+                                IsVisible="False"
+                                BackgroundColor="#FEF2F2"
+                                Stroke="#FECACA"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10">
+
+                                <Label
+                                    x:Name="ValidationLabel"
+                                    TextColor="#DC2626"
+                                    FontSize="10" />
+
+                            </Border>
+
+
+                            <!-- SAVE -->
+
+                            <Button
+                                x:Name="SaveButton"
+                                Text="CREATE EMPLOYEE"
+                                HeightRequest="48"
+                                BackgroundColor="#2563EB"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="8"
+                                Clicked="OnSaveClicked" />
+
+
+                            <Button
+                                Text="CLEAR FORM"
+                                HeightRequest="43"
+                                BackgroundColor="#F1F5F9"
+                                TextColor="#475569"
+                                FontAttributes="Bold"
+                                CornerRadius="8"
+                                Clicked="OnClearClicked" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+
+                    <!-- PASSWORD RESET -->
+
+                    <Border
+                        x:Name="PasswordResetSection"
+                        IsVisible="False"
+                        BackgroundColor="White"
+                        Stroke="#E2E8F0"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="20">
+
+                        <VerticalStackLayout Spacing="10">
+
+                            <Label
+                                Text="Change Password"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Set a new password for the selected employee."
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#CBD5E1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,2">
+
+                                <Entry
+                                    x:Name="NewPasswordEntry"
+                                    Placeholder="New password"
+                                    IsPassword="True"
+                                    TextColor="#0F172A"
+                                    PlaceholderColor="#94A3B8" />
+
+                            </Border>
+
+                            <Button
+                                Text="CHANGE PASSWORD"
+                                BackgroundColor="#0F2747"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="8"
+                                Clicked="OnChangePasswordClicked" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </VerticalStackLayout>
+
+            </ScrollView>
+
+
+            <!-- ================================================= -->
+            <!-- RIGHT: EMPLOYEE LIST -->
+            <!-- ================================================= -->
+
+            <Border
+                Grid.Column="1"
+                BackgroundColor="White"
+                Stroke="#E2E8F0"
+                StrokeShape="RoundRectangle 12"
+                Padding="20">
+
+                <Grid RowDefinitions="Auto,Auto,*">
+
+                    <!-- TITLE -->
+
+                    <Grid
+                        Grid.Row="0"
+                        ColumnDefinitions="*,Auto">
+
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="2">
+
+                            <Label
+                                Text="Employees"
+                                FontSize="19"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                x:Name="EmployeeCountLabel"
+                                Text="0 employees"
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                        </VerticalStackLayout>
+
+                        <ActivityIndicator
+                            Grid.Column="1"
+                            x:Name="LoadingIndicator"
+                            IsVisible="False"
+                            IsRunning="False"
+                            Color="#2563EB"
+                            WidthRequest="30"
+                            HeightRequest="30" />
+
+                    </Grid>
+
+
+                    <!-- SEARCH -->
+
+                    <Border
+                        Grid.Row="1"
+                        Margin="0,15,0,15"
+                        BackgroundColor="#F8FAFC"
+                        Stroke="#CBD5E1"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="10,2">
+
+                        <Entry
+                            x:Name="SearchEntry"
+                            Placeholder="Search employee..."
+                            TextColor="#0F172A"
+                            PlaceholderColor="#94A3B8"
+                            TextChanged="OnSearchTextChanged" />
+
+                    </Border>
+
+
+                    <!-- EMPLOYEE LIST -->
+
+                    <CollectionView
+                        Grid.Row="2"
+                        x:Name="EmployeesCollectionView"
+                        SelectionMode="Single"
+                        SelectionChanged="OnEmployeeSelected">
+
+                        <CollectionView.EmptyView>
+
+                            <VerticalStackLayout
+                                Padding="30"
+                                Spacing="8"
+                                VerticalOptions="Center">
+
+                                <Label
+                                    Text="No employees found"
+                                    FontSize="16"
+                                    FontAttributes="Bold"
+                                    TextColor="#64748B"
+                                    HorizontalTextAlignment="Center" />
+
+                                <Label
+                                    Text="Employee accounts will appear here."
+                                    FontSize="11"
+                                    TextColor="#94A3B8"
+                                    HorizontalTextAlignment="Center" />
+
+                            </VerticalStackLayout>
+
+                        </CollectionView.EmptyView>
+
+
+                        <CollectionView.ItemTemplate>
+
+                            <DataTemplate>
+
+                                <Border
+                                    Margin="0,0,0,10"
+                                    Padding="15"
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeShape="RoundRectangle 10">
+
+                                    <Grid
+                                        ColumnDefinitions="*,Auto"
+                                        RowDefinitions="Auto,Auto,Auto"
+                                        ColumnSpacing="15">
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Text="{Binding FullName}"
+                                            FontSize="14"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Text="{Binding StatusText}"
+                                            FontSize="10"
+                                            FontAttributes="Bold"
+                                            TextColor="#2563EB" />
+
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Text="{Binding EmployeeSummary}"
+                                            FontSize="10"
+                                            TextColor="#64748B" />
+
+                                        <Label
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            Text="{Binding DepartmentSummary}"
+                                            FontSize="10"
+                                            TextColor="#94A3B8" />
+
+                                    </Grid>
+
+                                </Border>
+
+                            </DataTemplate>
+
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
+
+                </Grid>
+
+            </Border>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

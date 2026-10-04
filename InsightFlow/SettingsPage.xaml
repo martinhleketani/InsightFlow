@@ -1,0 +1,1059 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="InsightFlow.SettingsPage"
+    Title="Settings"
+    BackgroundColor="#F8FAFC">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- HEADER -->
+        <Border
+            Grid.Row="0"
+            BackgroundColor="#0F2747"
+            StrokeThickness="0"
+            Padding="25,18">
+
+            <Grid ColumnDefinitions="Auto,*,Auto"
+                  ColumnSpacing="15">
+
+                <Button
+                    Grid.Column="0"
+                    Text="← Back"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    Clicked="OnBackClicked" />
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Spacing="3">
+
+                    <Label
+                        Text="SETTINGS"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="White" />
+
+                    <Label
+                        Text="InsightFlow system configuration and account information"
+                        FontSize="11"
+                        TextColor="#93C5FD" />
+
+                </VerticalStackLayout>
+
+                <Button
+                    Grid.Column="2"
+                    Text="REFRESH"
+                    BackgroundColor="#2563EB"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    Clicked="OnRefreshClicked" />
+
+            </Grid>
+
+        </Border>
+
+
+        <!-- CONTENT -->
+        <ScrollView Grid.Row="1">
+
+            <VerticalStackLayout
+                Padding="25"
+                Spacing="20">
+
+                <!-- TITLE -->
+                <Grid ColumnDefinitions="*,Auto">
+
+                    <VerticalStackLayout
+                        Grid.Column="0"
+                        Spacing="3">
+
+                        <Label
+                            Text="System Settings"
+                            FontSize="21"
+                            FontAttributes="Bold"
+                            TextColor="#0F172A" />
+
+                        <Label
+                            x:Name="LastUpdatedLabel"
+                            Text="InsightFlow configuration"
+                            FontSize="11"
+                            TextColor="#64748B" />
+
+                    </VerticalStackLayout>
+
+                    <ActivityIndicator
+                        Grid.Column="1"
+                        x:Name="LoadingIndicator"
+                        IsVisible="False"
+                        IsRunning="False"
+                        Color="#2563EB"
+                        WidthRequest="35"
+                        HeightRequest="35" />
+
+                </Grid>
+
+
+                <!-- MESSAGE -->
+                <Border
+                    x:Name="MessageBorder"
+                    IsVisible="False"
+                    BackgroundColor="#EFF6FF"
+                    Stroke="#BFDBFE"
+                    StrokeShape="RoundRectangle 8"
+                    Padding="12">
+
+                    <Label
+                        x:Name="MessageLabel"
+                        FontSize="11"
+                        TextColor="#1E40AF" />
+
+                </Border>
+
+
+                <!-- CURRENT ACCOUNT -->
+                <Border
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20">
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <VerticalStackLayout Spacing="3">
+
+                            <Label
+                                Text="Current Account"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Information for the employee currently signed in"
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                        </VerticalStackLayout>
+
+
+                        <Grid
+                            ColumnDefinitions="*,*"
+                            ColumnSpacing="25">
+
+                            <!-- LEFT -->
+                            <VerticalStackLayout
+                                Grid.Column="0"
+                                Spacing="15">
+
+                                <VerticalStackLayout Spacing="4">
+
+                                    <Label
+                                        Text="EMPLOYEE"
+                                        FontSize="9"
+                                        FontAttributes="Bold"
+                                        TextColor="#64748B" />
+
+                                    <Label
+                                        x:Name="CurrentEmployeeNameLabel"
+                                        Text="Not available"
+                                        FontSize="14"
+                                        FontAttributes="Bold"
+                                        TextColor="#0F172A" />
+
+                                </VerticalStackLayout>
+
+
+                                <VerticalStackLayout Spacing="4">
+
+                                    <Label
+                                        Text="EMPLOYEE ID"
+                                        FontSize="9"
+                                        FontAttributes="Bold"
+                                        TextColor="#64748B" />
+
+                                    <Label
+                                        x:Name="CurrentEmployeeIdLabel"
+                                        Text="Not available"
+                                        FontSize="12"
+                                        TextColor="#0F172A" />
+
+                                </VerticalStackLayout>
+
+
+                                <VerticalStackLayout Spacing="4">
+
+                                    <Label
+                                        Text="COMPANY EMAIL"
+                                        FontSize="9"
+                                        FontAttributes="Bold"
+                                        TextColor="#64748B" />
+
+                                    <Label
+                                        x:Name="CurrentEmployeeEmailLabel"
+                                        Text="Not available"
+                                        FontSize="12"
+                                        TextColor="#0F172A" />
+
+                                </VerticalStackLayout>
+
+                            </VerticalStackLayout>
+
+
+                            <!-- RIGHT -->
+                            <VerticalStackLayout
+                                Grid.Column="1"
+                                Spacing="15">
+
+                                <VerticalStackLayout Spacing="4">
+
+                                    <Label
+                                        Text="DEPARTMENT"
+                                        FontSize="9"
+                                        FontAttributes="Bold"
+                                        TextColor="#64748B" />
+
+                                    <Label
+                                        x:Name="CurrentDepartmentLabel"
+                                        Text="Not available"
+                                        FontSize="12"
+                                        TextColor="#0F172A" />
+
+                                </VerticalStackLayout>
+
+
+                                <VerticalStackLayout Spacing="4">
+
+                                    <Label
+                                        Text="ROLE"
+                                        FontSize="9"
+                                        FontAttributes="Bold"
+                                        TextColor="#64748B" />
+
+                                    <Label
+                                        x:Name="CurrentRoleLabel"
+                                        Text="Not available"
+                                        FontSize="12"
+                                        FontAttributes="Bold"
+                                        TextColor="#2563EB" />
+
+                                </VerticalStackLayout>
+
+
+                                <VerticalStackLayout Spacing="4">
+
+                                    <Label
+                                        Text="SESSION"
+                                        FontSize="9"
+                                        FontAttributes="Bold"
+                                        TextColor="#64748B" />
+
+                                    <Label
+                                        x:Name="SessionStatusLabel"
+                                        Text="Checking..."
+                                        FontSize="12"
+                                        FontAttributes="Bold"
+                                        TextColor="#64748B" />
+
+                                </VerticalStackLayout>
+
+                            </VerticalStackLayout>
+
+                        </Grid>
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <!-- COMPANY SETTINGS -->
+                <Border
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20">
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <VerticalStackLayout Spacing="3">
+
+                            <Label
+                                Text="Company Configuration"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Current InsightFlow company rules"
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                        </VerticalStackLayout>
+
+
+                        <Grid
+                            ColumnDefinitions="*,Auto"
+                            RowDefinitions="Auto,Auto,Auto"
+                            RowSpacing="15">
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Text="Company"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Text="InsightFlow"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Text="Company Email Domain"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Text="@insightflow.co.za"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#2563EB" />
+
+
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Text="Public Registration"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Text="Disabled"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#16A34A" />
+
+                        </Grid>
+
+
+                        <Border
+                            BackgroundColor="#F8FAFC"
+                            Stroke="#E2E8F0"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="12">
+
+                            <Label
+                                Text="Employee accounts are created and maintained by authorised management through Employee Management. Employees cannot choose their own Employee ID, department or role."
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                        </Border>
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <!-- DEPARTMENTS -->
+                <Border
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20">
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <VerticalStackLayout Spacing="3">
+
+                            <Label
+                                Text="Configured Departments"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Department names and employee ID prefixes used by InsightFlow"
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                        </VerticalStackLayout>
+
+
+                        <Grid
+                            ColumnDefinitions="*,*"
+                            ColumnSpacing="20">
+
+                            <!-- LEFT -->
+                            <VerticalStackLayout
+                                Grid.Column="0"
+                                Spacing="8">
+
+                                <Border
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="11">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+
+                                        <Label
+                                            Text="Sales"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="IF-SAL"
+                                            FontSize="10"
+                                            TextColor="#2563EB" />
+
+                                    </Grid>
+
+                                </Border>
+
+
+                                <Border
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="11">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+
+                                        <Label
+                                            Text="Finance"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="IF-FIN"
+                                            FontSize="10"
+                                            TextColor="#2563EB" />
+
+                                    </Grid>
+
+                                </Border>
+
+
+                                <Border
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="11">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+
+                                        <Label
+                                            Text="Human Resources"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="IF-HR"
+                                            FontSize="10"
+                                            TextColor="#2563EB" />
+
+                                    </Grid>
+
+                                </Border>
+
+
+                                <Border
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="11">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+
+                                        <Label
+                                            Text="Information Technology"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="IF-IT"
+                                            FontSize="10"
+                                            TextColor="#2563EB" />
+
+                                    </Grid>
+
+                                </Border>
+
+
+                                <Border
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="11">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+
+                                        <Label
+                                            Text="Marketing"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="IF-MKT"
+                                            FontSize="10"
+                                            TextColor="#2563EB" />
+
+                                    </Grid>
+
+                                </Border>
+
+                            </VerticalStackLayout>
+
+
+                            <!-- RIGHT -->
+                            <VerticalStackLayout
+                                Grid.Column="1"
+                                Spacing="8">
+
+                                <Border
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="11">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+
+                                        <Label
+                                            Text="Operations"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="IF-OPS"
+                                            FontSize="10"
+                                            TextColor="#2563EB" />
+
+                                    </Grid>
+
+                                </Border>
+
+
+                                <Border
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="11">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+
+                                        <Label
+                                            Text="Customer Service"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="IF-CS"
+                                            FontSize="10"
+                                            TextColor="#2563EB" />
+
+                                    </Grid>
+
+                                </Border>
+
+
+                                <Border
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="11">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+
+                                        <Label
+                                            Text="Procurement"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="IF-PRC"
+                                            FontSize="10"
+                                            TextColor="#2563EB" />
+
+                                    </Grid>
+
+                                </Border>
+
+
+                                <Border
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="11">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+
+                                        <Label
+                                            Text="Management"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#0F172A" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="IF-MGT"
+                                            FontSize="10"
+                                            TextColor="#2563EB" />
+
+                                    </Grid>
+
+                                </Border>
+
+                            </VerticalStackLayout>
+
+                        </Grid>
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <!-- SECURITY -->
+                <Border
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20">
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <VerticalStackLayout Spacing="3">
+
+                            <Label
+                                Text="Security Configuration"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Authentication rules currently used by InsightFlow"
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                        </VerticalStackLayout>
+
+
+                        <Grid
+                            ColumnDefinitions="*,Auto"
+                            RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                            RowSpacing="14">
+
+                            <Label
+                                Grid.Row="0"
+                                Text="Company Email Required"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Text="Enabled"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#16A34A" />
+
+
+                            <Label
+                                Grid.Row="1"
+                                Text="Employee ID Required"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Text="Enabled"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#16A34A" />
+
+
+                            <Label
+                                Grid.Row="2"
+                                Text="Password Authentication"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Text="Enabled"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#16A34A" />
+
+
+                            <Label
+                                Grid.Row="3"
+                                Text="JWT API Authentication"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Text="Enabled"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#16A34A" />
+
+
+                            <Label
+                                Grid.Row="4"
+                                Text="Role-Based Access"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Text="Enabled"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#16A34A" />
+
+                        </Grid>
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <!-- API CONNECTION -->
+                <Border
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20">
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <VerticalStackLayout Spacing="3">
+
+                            <Label
+                                Text="API Connection"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Connection between the MAUI application and InsightFlow API"
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                        </VerticalStackLayout>
+
+
+                        <Grid
+                            ColumnDefinitions="*,Auto"
+                            RowDefinitions="Auto,Auto,Auto"
+                            RowSpacing="14">
+
+                            <Label
+                                Grid.Row="0"
+                                Text="Development API"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Text="https://localhost:7212/"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+
+                            <Label
+                                Grid.Row="1"
+                                Text="Connection Status"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                x:Name="ApiStatusLabel"
+                                Text="Not checked"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#64748B" />
+
+
+                            <Label
+                                Grid.Row="2"
+                                Text="Last Check"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                x:Name="ApiLastCheckLabel"
+                                Text="Never"
+                                FontSize="11"
+                                TextColor="#0F172A" />
+
+                        </Grid>
+
+
+                        <Button
+                            Text="TEST API CONNECTION"
+                            BackgroundColor="#2563EB"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            HorizontalOptions="Start"
+                            Clicked="OnTestApiClicked" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <!-- SYSTEM -->
+                <Border
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20">
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <VerticalStackLayout Spacing="3">
+
+                            <Label
+                                Text="System Information"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="InsightFlow application architecture"
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                        </VerticalStackLayout>
+
+
+                        <Grid
+                            ColumnDefinitions="*,Auto"
+                            RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                            RowSpacing="14">
+
+                            <Label
+                                Grid.Row="0"
+                                Text="Application"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Text="InsightFlow"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+
+                            <Label
+                                Grid.Row="1"
+                                Text="Frontend"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Text=".NET MAUI"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+
+                            <Label
+                                Grid.Row="2"
+                                Text="Backend"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Text="ASP.NET Core Web API"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+
+                            <Label
+                                Grid.Row="3"
+                                Text="Database"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Text="MySQL 8"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+
+                            <Label
+                                Grid.Row="4"
+                                Text="Authentication"
+                                FontSize="11"
+                                TextColor="#64748B" />
+
+                            <Label
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Text="JWT Bearer"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                        </Grid>
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <!-- ACCOUNT MANAGEMENT -->
+                <Border
+                    BackgroundColor="#EFF6FF"
+                    Stroke="#BFDBFE"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20">
+
+                    <Grid
+                        ColumnDefinitions="*,Auto"
+                        ColumnSpacing="20">
+
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="5">
+
+                            <Label
+                                Text="Employee Account Management"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                TextColor="#1E3A8A" />
+
+                            <Label
+                                Text="Create accounts, update employee information, change passwords and enable or disable employee access from Employee Management."
+                                FontSize="10"
+                                TextColor="#1E40AF" />
+
+                        </VerticalStackLayout>
+
+                        <Button
+                            Grid.Column="1"
+                            Text="OPEN EMPLOYEE MANAGEMENT"
+                            BackgroundColor="#2563EB"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            FontSize="10"
+                            CornerRadius="8"
+                            VerticalOptions="Center"
+                            Clicked="OnEmployeeManagementClicked" />
+
+                    </Grid>
+
+                </Border>
+
+
+                <!-- LOGOUT -->
+                <Border
+                    BackgroundColor="White"
+                    Stroke="#FECACA"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20">
+
+                    <Grid
+                        ColumnDefinitions="*,Auto"
+                        ColumnSpacing="20">
+
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="4">
+
+                            <Label
+                                Text="End Session"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                TextColor="#0F172A" />
+
+                            <Label
+                                Text="Sign out of InsightFlow on this device."
+                                FontSize="10"
+                                TextColor="#64748B" />
+
+                        </VerticalStackLayout>
+
+                        <Button
+                            Grid.Column="1"
+                            Text="LOG OUT"
+                            BackgroundColor="#DC2626"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            VerticalOptions="Center"
+                            Clicked="OnLogoutClicked" />
+
+                    </Grid>
+
+                </Border>
+
+
+                <Label
+                    Text="MARTIN • INSIGHTFLOW"
+                    FontSize="9"
+                    FontAttributes="Bold"
+                    TextColor="#94A3B8"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,0,0,15" />
+
+            </VerticalStackLayout>
+
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>
