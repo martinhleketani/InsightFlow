@@ -50,10 +50,6 @@ After successful authentication, the ASP.NET Core API generates a JWT used to ac
 
 Passwords are hashed using ASP.NET Core `PasswordHasher<Employee>` and are not stored as readable plain-text passwords.
 
-### Login Interface
-
-![InsightFlow Login](docs/screenshots/Login_png.png)
-
 ---
 
 # 👥 User Roles
@@ -83,18 +79,6 @@ Administrator functionality includes access to areas such as:
 - Overall organisational performance
 
 The Administrator can create Manager and Employee accounts through **Employee Management**.
-
-### Administrator Dashboard
-
-The Administrator Dashboard provides a company-wide overview of organisational activity and performance.
-
-![InsightFlow Administrator Dashboard](docs/screenshots/AdminDashboard.png)
-
-### Employee Management
-
-Administrators can manage employee accounts, roles, departments, and account status through the Employee Management interface.
-
-![InsightFlow Employee Management](docs/screenshots/Employee%20Management.png)
 
 ## 👔 Manager
 
@@ -136,14 +120,6 @@ Reporting and analytics functionality includes:
 - Business value trends
 - Filtering and reporting
 - PDF report generation
-
-### Report Overview
-
-![InsightFlow Report](docs/screenshots/previous_report_test.png)
-
-### Report Analytics
-
-![InsightFlow Report Analytics](docs/screenshots/Previous_report_testing.png)
 
 ---
 
@@ -538,14 +514,6 @@ InsightFlow/
 │   ├── Models/
 │   ├── Migrations/
 │   └── Services/
-│
-├── docs/
-│   └── screenshots/
-│       ├── Login_png.png
-│       ├── AdminDashboard.png
-│       ├── Employee Management.png
-│       ├── previous_report_test.png
-│       └── Previous_report_testing.png
 │
 ├── InsightFlow.sln
 ├── .gitignore
