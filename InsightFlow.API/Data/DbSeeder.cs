@@ -7,77 +7,80 @@ namespace InsightFlow.API.Data
     public static class DbSeeder
     {
         public static async Task SeedAsync(
-            InsightFlowDbContext context)
+            InsightFlowDbContext context,
+            IConfiguration configuration)
         {
             // =====================================================
-            // APPLY PENDING DATABASE MIGRATIONS
+            // APPLY DATABASE MIGRATIONS
             // =====================================================
 
             await context.Database.MigrateAsync();
 
 
             // =====================================================
-            // 1. CREATE DEPARTMENTS IF THEY DO NOT EXIST
+            // SEED DEPARTMENTS
             // =====================================================
 
             if (!await context.Departments.AnyAsync())
             {
-                var departments = new List<Department>
-                {
-                    new()
+                var departments =
+                    new List<Department>
                     {
-                        DepartmentName = "Sales",
-                        DepartmentCode = "IF-SAL"
-                    },
+                        new()
+                        {
+                            DepartmentName = "Sales",
+                            DepartmentCode = "IF-SAL"
+                        },
 
-                    new()
-                    {
-                        DepartmentName = "Finance",
-                        DepartmentCode = "IF-FIN"
-                    },
+                        new()
+                        {
+                            DepartmentName = "Finance",
+                            DepartmentCode = "IF-FIN"
+                        },
 
-                    new()
-                    {
-                        DepartmentName = "Human Resources",
-                        DepartmentCode = "IF-HR"
-                    },
+                        new()
+                        {
+                            DepartmentName = "Human Resources",
+                            DepartmentCode = "IF-HR"
+                        },
 
-                    new()
-                    {
-                        DepartmentName = "Information Technology",
-                        DepartmentCode = "IF-IT"
-                    },
+                        new()
+                        {
+                            DepartmentName = "Information Technology",
+                            DepartmentCode = "IF-IT"
+                        },
 
-                    new()
-                    {
-                        DepartmentName = "Marketing",
-                        DepartmentCode = "IF-MKT"
-                    },
+                        new()
+                        {
+                            DepartmentName = "Marketing",
+                            DepartmentCode = "IF-MKT"
+                        },
 
-                    new()
-                    {
-                        DepartmentName = "Operations",
-                        DepartmentCode = "IF-OPS"
-                    },
+                        new()
+                        {
+                            DepartmentName = "Operations",
+                            DepartmentCode = "IF-OPS"
+                        },
 
-                    new()
-                    {
-                        DepartmentName = "Customer Service",
-                        DepartmentCode = "IF-CS"
-                    },
+                        new()
+                        {
+                            DepartmentName = "Customer Service",
+                            DepartmentCode = "IF-CS"
+                        },
 
-                    new()
-                    {
-                        DepartmentName = "Procurement",
-                        DepartmentCode = "IF-PRC"
-                    },
+                        new()
+                        {
+                            DepartmentName = "Procurement",
+                            DepartmentCode = "IF-PRC"
+                        },
 
-                    new()
-                    {
-                        DepartmentName = "Management",
-                        DepartmentCode = "IF-MGT"
-                    }
-                };
+                        new()
+                        {
+                            DepartmentName = "Management",
+                            DepartmentCode = "IF-MGT"
+                        }
+                    };
+
 
                 await context.Departments.AddRangeAsync(
                     departments);
@@ -87,13 +90,16 @@ namespace InsightFlow.API.Data
 
 
             // =====================================================
-            // 2. FIND REQUIRED DEPARTMENTS
+            // FIND MANAGEMENT DEPARTMENT
             // =====================================================
 
-            var managementDepartment =
+            Department? managementDepartment =
                 await context.Departments
-                    .FirstOrDefaultAsync(d =>
-                        d.DepartmentCode == "IF-MGT");
+                    .FirstOrDefaultAsync(
+                        department =>
+                            department.DepartmentCode ==
+                            "IF-MGT");
+
 
             if (managementDepartment == null)
             {
@@ -102,150 +108,108 @@ namespace InsightFlow.API.Data
             }
 
 
-            var informationTechnologyDepartment =
-                await context.Departments
-                    .FirstOrDefaultAsync(d =>
-                        d.DepartmentCode == "IF-IT");
+            // =====================================================
+            // CHECK INITIAL ADMINISTRATOR
+            // =====================================================
 
-            if (informationTechnologyDepartment == null)
-            {
-                throw new InvalidOperationException(
-                    "Information Technology department could not be found.");
-            }
+            bool adminExists =
+                await context.Employees
+                    .AnyAsync(
+                        employee =>
+                            employee.EmployeeId ==
+                            "IF-MGT-0001"
+
+                            ||
+
+                            employee.CompanyEmail ==
+                            "admin@insightflow.co.za");
 
 
             // =====================================================
-            // PASSWORD HASHER
+            // CREATE INITIAL ADMINISTRATOR
+            //
+            // Only the first administrator is automatically created.
+            //
+            // Normal employees and managers must be created through
+            // the Employee Management page by an Administrator.
+            //
+            // The initial administrator password is NOT stored in
+            // source code. It is loaded from configuration.
+            //
+            // Development:
+            // User Secrets -> SeedAdmin:Password
+            //
+            // Production:
+            // Environment variable or another secure configuration
+            // provider.
             // =====================================================
-
-            var passwordHasher =
-                new PasswordHasher<Employee>();
-
-
-            // =====================================================
-            // 3. CHECK AND CREATE ADMINISTRATOR
-            // =====================================================
-
-            var adminExists =
-                await context.Employees.AnyAsync(e =>
-                    e.EmployeeId == "IF-MGT-0001" ||
-                    e.CompanyEmail ==
-                        "admin@insightflow.co.za");
-
 
             if (!adminExists)
             {
-                var admin = new Employee
+                string? adminPassword =
+                    configuration["SeedAdmin:Password"];
+
+
+                if (string.IsNullOrWhiteSpace(adminPassword))
                 {
-                    EmployeeId = "IF-MGT-0001",
+                    throw new InvalidOperationException(
+                        "The initial administrator password was not configured. " +
+                        "Configure 'SeedAdmin:Password' using User Secrets " +
+                        "or another secure configuration provider.");
+                }
 
-                    FirstName = "System",
 
-                    LastName = "Administrator",
+                var admin =
+                    new Employee
+                    {
+                        EmployeeId =
+                            "IF-MGT-0001",
 
-                    CompanyEmail =
-                        "admin@insightflow.co.za",
+                        FirstName =
+                            "System",
 
-                    DepartmentId =
-                        managementDepartment.DepartmentId,
+                        LastName =
+                            "Administrator",
 
-                    JobTitle =
-                        "System Administrator",
+                        CompanyEmail =
+                            "admin@insightflow.co.za",
 
-                    Role =
-                        "Administrator",
+                        DepartmentId =
+                            managementDepartment.DepartmentId,
 
-                    IsActive = true,
+                        JobTitle =
+                            "System Administrator",
 
-                    DateCreated =
-                        DateTime.UtcNow
-                };
+                        Role =
+                            "Administrator",
+
+                        IsActive =
+                            true,
+
+                        DateCreated =
+                            DateTime.UtcNow
+                    };
 
 
                 // =================================================
-                // HASH ADMIN PASSWORD
+                // HASH INITIAL ADMIN PASSWORD
                 // =================================================
+
+                var passwordHasher =
+                    new PasswordHasher<Employee>();
+
 
                 admin.PasswordHash =
                     passwordHasher.HashPassword(
                         admin,
-                        "InsightAdmin123!"
-                    );
+                        adminPassword);
 
 
-                // =================================================
-                // ADD ADMINISTRATOR
-                // =================================================
+                await context.Employees.AddAsync(
+                    admin);
 
-                await context.Employees.AddAsync(admin);
+                await context.SaveChangesAsync();
             }
-
-
-            // =====================================================
-            // 4. CHECK AND CREATE DEMO EMPLOYEE
-            // =====================================================
-
-            var employeeExists =
-                await context.Employees.AnyAsync(e =>
-                    e.EmployeeId == "IF-IT-0001" ||
-                    e.CompanyEmail ==
-                        "employee@insightflow.co.za");
-
-
-            if (!employeeExists)
-            {
-                var employee = new Employee
-                {
-                    EmployeeId = "IF-IT-0001",
-
-                    FirstName = "Demo",
-
-                    LastName = "Employee",
-
-                    CompanyEmail =
-                        "employee@insightflow.co.za",
-
-                    DepartmentId =
-                        informationTechnologyDepartment
-                            .DepartmentId,
-
-                    JobTitle =
-                        "IT Employee",
-
-                    Role =
-                        "Employee",
-
-                    IsActive = true,
-
-                    DateCreated =
-                        DateTime.UtcNow
-                };
-
-
-                // =================================================
-                // HASH EMPLOYEE PASSWORD
-                // =================================================
-
-                employee.PasswordHash =
-                    passwordHasher.HashPassword(
-                        employee,
-                        "InsightEmployee123!"
-                    );
-
-
-                // =================================================
-                // ADD DEMO EMPLOYEE
-                // =================================================
-
-                await context.Employees.AddAsync(employee);
-            }
-
-
-            // =====================================================
-            // 5. SAVE ALL CHANGES TO MYSQL
-            // =====================================================
-
-            await context.SaveChangesAsync();
         }
     }
 }

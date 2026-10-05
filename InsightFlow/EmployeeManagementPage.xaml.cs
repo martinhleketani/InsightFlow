@@ -20,6 +20,8 @@ namespace InsightFlow
 
         private bool _editingEmployee;
 
+        private string _employeeStatusFilter = "All";
+
         private static readonly JsonSerializerOptions JsonOptions =
             new()
             {
@@ -46,6 +48,8 @@ namespace InsightFlow
                 };
 
             ClearForm();
+
+            UpdateStatusFilterButtons();
         }
 
 
@@ -496,13 +500,49 @@ namespace InsightFlow
 
 
         // =========================================================
-        // SEARCH
+        // SEARCH AND STATUS FILTERS
         // =========================================================
 
         private void OnSearchTextChanged(
             object sender,
             TextChangedEventArgs e)
         {
+            ApplySearchFilter();
+        }
+
+
+        private void OnAllEmployeesClicked(
+            object sender,
+            EventArgs e)
+        {
+            _employeeStatusFilter = "All";
+
+            UpdateStatusFilterButtons();
+
+            ApplySearchFilter();
+        }
+
+
+        private void OnActiveEmployeesClicked(
+            object sender,
+            EventArgs e)
+        {
+            _employeeStatusFilter = "Active";
+
+            UpdateStatusFilterButtons();
+
+            ApplySearchFilter();
+        }
+
+
+        private void OnInactiveEmployeesClicked(
+            object sender,
+            EventArgs e)
+        {
+            _employeeStatusFilter = "Inactive";
+
+            UpdateStatusFilterButtons();
+
             ApplySearchFilter();
         }
 
@@ -518,11 +558,41 @@ namespace InsightFlow
                 _employees;
 
 
+            // =====================================================
+            // STATUS FILTER
+            // =====================================================
+
+            if (string.Equals(
+                    _employeeStatusFilter,
+                    "Active",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                result =
+                    result.Where(
+                        employee =>
+                            employee.IsActive);
+            }
+            else if (string.Equals(
+                         _employeeStatusFilter,
+                         "Inactive",
+                         StringComparison.OrdinalIgnoreCase))
+            {
+                result =
+                    result.Where(
+                        employee =>
+                            !employee.IsActive);
+            }
+
+
+            // =====================================================
+            // TEXT SEARCH
+            // =====================================================
+
             if (!string.IsNullOrWhiteSpace(
                     search))
             {
                 result =
-                    _employees.Where(
+                    result.Where(
                         employee =>
 
                             ContainsText(
@@ -582,6 +652,38 @@ namespace InsightFlow
                 displayList.Count == 1
                     ? "1 employee"
                     : $"{displayList.Count} employees";
+        }
+
+
+        private void UpdateStatusFilterButtons()
+        {
+            bool showingAll =
+                string.Equals(
+                    _employeeStatusFilter,
+                    "All",
+                    StringComparison.OrdinalIgnoreCase);
+
+            bool showingActive =
+                string.Equals(
+                    _employeeStatusFilter,
+                    "Active",
+                    StringComparison.OrdinalIgnoreCase);
+
+            bool showingInactive =
+                string.Equals(
+                    _employeeStatusFilter,
+                    "Inactive",
+                    StringComparison.OrdinalIgnoreCase);
+
+
+            AllEmployeesButton.Opacity =
+                showingAll ? 1.0 : 0.55;
+
+            ActiveEmployeesButton.Opacity =
+                showingActive ? 1.0 : 0.55;
+
+            InactiveEmployeesButton.Opacity =
+                showingInactive ? 1.0 : 0.55;
         }
 
 
@@ -866,6 +968,66 @@ namespace InsightFlow
             }
 
 
+            EmployeeDto? selectedEmployee =
+                _employees.FirstOrDefault(
+                    employee =>
+                        employee.AccountId ==
+                        _selectedAccountId.Value);
+
+
+            bool isDeactivating =
+                selectedEmployee != null &&
+                selectedEmployee.IsActive &&
+                !ActiveSwitch.IsToggled;
+
+
+            bool isReactivating =
+                selectedEmployee != null &&
+                !selectedEmployee.IsActive &&
+                ActiveSwitch.IsToggled;
+
+
+            if (isDeactivating)
+            {
+                bool confirmDeactivate =
+                    await DisplayAlert(
+                        "Deactivate Employee",
+                        $"Are you sure you want to deactivate {selectedEmployee!.FullName}?\n\n" +
+                        "This employee will no longer be able to sign in to InsightFlow.\n\n" +
+                        "Their historical company records will be retained.",
+                        "Deactivate",
+                        "Cancel");
+
+
+                if (!confirmDeactivate)
+                {
+                    ActiveSwitch.IsToggled = true;
+
+                    return;
+                }
+            }
+
+
+            if (isReactivating)
+            {
+                bool confirmReactivate =
+                    await DisplayAlert(
+                        "Reactivate Employee",
+                        $"Are you sure you want to reactivate {selectedEmployee!.FullName}?\n\n" +
+                        "This employee will be allowed to sign in to InsightFlow again.",
+                        "Reactivate",
+                        "Cancel");
+
+
+                if (!confirmReactivate)
+                {
+                    ActiveSwitch.IsToggled = false;
+
+                    return;
+                }
+            }
+
+
             try
             {
                 SetLoading(true);
@@ -911,10 +1073,9 @@ namespace InsightFlow
 
 
                 using HttpResponseMessage response =
-                    await _httpClient
-                        .PutAsJsonAsync(
-                            $"api/Employees/{_selectedAccountId}",
-                            request);
+                    await _httpClient.PutAsJsonAsync(
+                        $"api/Employees/{_selectedAccountId.Value}",
+                        request);
 
 
                 if (response.StatusCode ==
@@ -949,7 +1110,6 @@ namespace InsightFlow
                             ? "Unable to update employee."
                             : error);
 
-
                     return;
                 }
 
@@ -959,10 +1119,29 @@ namespace InsightFlow
                     ActiveSwitch.IsToggled);
 
 
-                await DisplayAlert(
-                    "Employee Updated",
-                    "The employee account was updated successfully.",
-                    "OK");
+                if (isDeactivating)
+                {
+                    await DisplayAlert(
+                        "Employee Deactivated",
+                        $"{selectedEmployee!.FullName} has been deactivated.\n\n" +
+                        "The employee can no longer sign in to InsightFlow. " +
+                        "Their historical company records have been retained.",
+                        "OK");
+                }
+                else if (isReactivating)
+                {
+                    await DisplayAlert(
+                        "Employee Reactivated",
+                        $"{selectedEmployee!.FullName} has been reactivated and can sign in again.",
+                        "OK");
+                }
+                else
+                {
+                    await DisplayAlert(
+                        "Employee Updated",
+                        "The employee account was updated successfully.",
+                        "OK");
+                }
 
 
                 ClearForm();

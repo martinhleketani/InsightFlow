@@ -5,7 +5,12 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InsightFlow", "InsightFlow\InsightFlow.csproj", "{A8EACB16-868B-41AA-8DBE-7827A847E17A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsightFlow.API", "InsightFlow.API\InsightFlow.API.csproj", "{A176A757-758E-44E4-8619-8AC966204A63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InsightFlow.API", "InsightFlow.API\InsightFlow.API.csproj", "{A176A757-758E-44E4-8619-8AC966204A63}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8CB3D37C-5647-430A-8B87-383C39A01AA6}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

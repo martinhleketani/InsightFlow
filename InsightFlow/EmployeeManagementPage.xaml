@@ -9,15 +9,19 @@
 
     <Grid RowDefinitions="Auto,*">
 
+        <!-- ===================================================== -->
         <!-- HEADER -->
+        <!-- ===================================================== -->
+
         <Border
             Grid.Row="0"
             BackgroundColor="#0F2747"
             StrokeThickness="0"
             Padding="25,18">
 
-            <Grid ColumnDefinitions="Auto,*,Auto"
-                  ColumnSpacing="15">
+            <Grid
+                ColumnDefinitions="Auto,*,Auto"
+                ColumnSpacing="15">
 
                 <Button
                     Grid.Column="0"
@@ -58,7 +62,10 @@
         </Border>
 
 
+        <!-- ===================================================== -->
         <!-- CONTENT -->
+        <!-- ===================================================== -->
+
         <Grid
             Grid.Row="1"
             ColumnDefinitions="380,*"
@@ -95,7 +102,9 @@
                                 TextColor="#64748B" />
 
 
+                            <!-- ================================= -->
                             <!-- EMPLOYEE ID -->
+                            <!-- ================================= -->
 
                             <Label
                                 Text="Employee ID *"
@@ -118,7 +127,9 @@
                             </Border>
 
 
+                            <!-- ================================= -->
                             <!-- FIRST NAME -->
+                            <!-- ================================= -->
 
                             <Label
                                 Text="First Name *"
@@ -141,7 +152,9 @@
                             </Border>
 
 
+                            <!-- ================================= -->
                             <!-- LAST NAME -->
+                            <!-- ================================= -->
 
                             <Label
                                 Text="Last Name *"
@@ -164,7 +177,9 @@
                             </Border>
 
 
-                            <!-- EMAIL -->
+                            <!-- ================================= -->
+                            <!-- COMPANY EMAIL -->
+                            <!-- ================================= -->
 
                             <Label
                                 Text="Company Email *"
@@ -188,7 +203,9 @@
                             </Border>
 
 
+                            <!-- ================================= -->
                             <!-- DEPARTMENT -->
+                            <!-- ================================= -->
 
                             <Label
                                 Text="Department *"
@@ -234,7 +251,9 @@
                             </Border>
 
 
+                            <!-- ================================= -->
                             <!-- JOB TITLE -->
+                            <!-- ================================= -->
 
                             <Label
                                 Text="Job Title *"
@@ -257,7 +276,9 @@
                             </Border>
 
 
-                            <!-- ROLE -->
+                            <!-- ================================= -->
+                            <!-- SYSTEM ROLE -->
+                            <!-- ================================= -->
 
                             <Label
                                 Text="System Role *"
@@ -290,7 +311,9 @@
                             </Border>
 
 
+                            <!-- ================================= -->
                             <!-- PASSWORD -->
+                            <!-- ================================= -->
 
                             <Label
                                 x:Name="PasswordLabel"
@@ -316,36 +339,49 @@
                             </Border>
 
 
-                            <!-- STATUS -->
+                            <!-- ================================= -->
+                            <!-- ACCOUNT STATUS -->
+                            <!-- ================================= -->
 
-                            <Grid ColumnDefinitions="*,Auto">
+                            <Border
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#E2E8F0"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="12">
 
-                                <VerticalStackLayout
-                                    Grid.Column="0"
-                                    Spacing="2">
+                                <Grid ColumnDefinitions="*,Auto">
 
-                                    <Label
-                                        Text="Account Active"
-                                        FontSize="11"
-                                        FontAttributes="Bold"
-                                        TextColor="#475569" />
+                                    <VerticalStackLayout
+                                        Grid.Column="0"
+                                        Spacing="2">
 
-                                    <Label
-                                        Text="Allow employee to access InsightFlow"
-                                        FontSize="9"
-                                        TextColor="#94A3B8" />
+                                        <Label
+                                            Text="Account Active"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#475569" />
 
-                                </VerticalStackLayout>
+                                        <Label
+                                            Text="Turn this off when an employee leaves the company. Their historical records and reports will remain."
+                                            FontSize="9"
+                                            TextColor="#94A3B8" />
 
-                                <Switch
-                                    Grid.Column="1"
-                                    x:Name="ActiveSwitch"
-                                    IsToggled="True" />
+                                    </VerticalStackLayout>
 
-                            </Grid>
+                                    <Switch
+                                        Grid.Column="1"
+                                        x:Name="ActiveSwitch"
+                                        IsToggled="True"
+                                        VerticalOptions="Center" />
+
+                                </Grid>
+
+                            </Border>
 
 
+                            <!-- ================================= -->
                             <!-- VALIDATION -->
+                            <!-- ================================= -->
 
                             <Border
                                 x:Name="ValidationBorder"
@@ -363,7 +399,9 @@
                             </Border>
 
 
+                            <!-- ================================= -->
                             <!-- SAVE -->
+                            <!-- ================================= -->
 
                             <Button
                                 x:Name="SaveButton"
@@ -374,7 +412,6 @@
                                 FontAttributes="Bold"
                                 CornerRadius="8"
                                 Clicked="OnSaveClicked" />
-
 
                             <Button
                                 Text="CLEAR FORM"
@@ -390,7 +427,9 @@
                     </Border>
 
 
+                    <!-- ========================================= -->
                     <!-- PASSWORD RESET -->
+                    <!-- ========================================= -->
 
                     <Border
                         x:Name="PasswordResetSection"
@@ -456,9 +495,13 @@
                 StrokeShape="RoundRectangle 12"
                 Padding="20">
 
-                <Grid RowDefinitions="Auto,Auto,*">
+                <Grid
+                    RowDefinitions="Auto,Auto,Auto,*">
 
+
+                    <!-- ========================================= -->
                     <!-- TITLE -->
+                    <!-- ========================================= -->
 
                     <Grid
                         Grid.Row="0"
@@ -494,11 +537,13 @@
                     </Grid>
 
 
+                    <!-- ========================================= -->
                     <!-- SEARCH -->
+                    <!-- ========================================= -->
 
                     <Border
                         Grid.Row="1"
-                        Margin="0,15,0,15"
+                        Margin="0,15,0,10"
                         BackgroundColor="#F8FAFC"
                         Stroke="#CBD5E1"
                         StrokeShape="RoundRectangle 8"
@@ -514,10 +559,64 @@
                     </Border>
 
 
+                    <!-- ========================================= -->
+                    <!-- EMPLOYEE STATUS FILTERS -->
+                    <!-- ========================================= -->
+
+                    <Grid
+                        Grid.Row="2"
+                        ColumnDefinitions="Auto,Auto,Auto,*"
+                        ColumnSpacing="8"
+                        Margin="0,0,0,15">
+
+                        <Button
+                            Grid.Column="0"
+                            x:Name="AllEmployeesButton"
+                            Text="ALL"
+                            HeightRequest="36"
+                            Padding="18,0"
+                            BackgroundColor="#2563EB"
+                            TextColor="White"
+                            FontSize="10"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            Clicked="OnAllEmployeesClicked" />
+
+                        <Button
+                            Grid.Column="1"
+                            x:Name="ActiveEmployeesButton"
+                            Text="ACTIVE"
+                            HeightRequest="36"
+                            Padding="18,0"
+                            BackgroundColor="#F1F5F9"
+                            TextColor="#475569"
+                            FontSize="10"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            Clicked="OnActiveEmployeesClicked" />
+
+                        <Button
+                            Grid.Column="2"
+                            x:Name="InactiveEmployeesButton"
+                            Text="INACTIVE"
+                            HeightRequest="36"
+                            Padding="18,0"
+                            BackgroundColor="#F1F5F9"
+                            TextColor="#475569"
+                            FontSize="10"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            Clicked="OnInactiveEmployeesClicked" />
+
+                    </Grid>
+
+
+                    <!-- ========================================= -->
                     <!-- EMPLOYEE LIST -->
+                    <!-- ========================================= -->
 
                     <CollectionView
-                        Grid.Row="2"
+                        Grid.Row="3"
                         x:Name="EmployeesCollectionView"
                         SelectionMode="Single"
                         SelectionChanged="OnEmployeeSelected">
@@ -537,7 +636,7 @@
                                     HorizontalTextAlignment="Center" />
 
                                 <Label
-                                    Text="Employee accounts will appear here."
+                                    Text="No employee accounts match the selected filter."
                                     FontSize="11"
                                     TextColor="#94A3B8"
                                     HorizontalTextAlignment="Center" />
@@ -563,6 +662,8 @@
                                         RowDefinitions="Auto,Auto,Auto"
                                         ColumnSpacing="15">
 
+                                        <!-- EMPLOYEE NAME -->
+
                                         <Label
                                             Grid.Row="0"
                                             Grid.Column="0"
@@ -571,24 +672,45 @@
                                             FontAttributes="Bold"
                                             TextColor="#0F172A" />
 
-                                        <Label
+
+                                        <!-- STATUS -->
+
+                                        <Border
                                             Grid.Row="0"
                                             Grid.Column="1"
-                                            Text="{Binding StatusText}"
-                                            FontSize="10"
-                                            FontAttributes="Bold"
-                                            TextColor="#2563EB" />
+                                            Padding="10,4"
+                                            BackgroundColor="#EFF6FF"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 20">
+
+                                            <Label
+                                                Text="{Binding StatusText}"
+                                                FontSize="9"
+                                                FontAttributes="Bold"
+                                                TextColor="#2563EB" />
+
+                                        </Border>
+
+
+                                        <!-- ID + EMAIL -->
 
                                         <Label
                                             Grid.Row="1"
                                             Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            Margin="0,5,0,0"
                                             Text="{Binding EmployeeSummary}"
                                             FontSize="10"
                                             TextColor="#64748B" />
 
+
+                                        <!-- DEPARTMENT + JOB + ROLE -->
+
                                         <Label
                                             Grid.Row="2"
                                             Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            Margin="0,3,0,0"
                                             Text="{Binding DepartmentSummary}"
                                             FontSize="10"
                                             TextColor="#94A3B8" />

@@ -461,15 +461,24 @@ namespace InsightFlow.Services
                     .FontSize(14)
                     .SemiBold();
 
-                if (data.Count == 0)
+                if (data == null || data.Count == 0)
                 {
                     column.Item()
+                        .Border(1)
+                        .BorderColor("#E2E8F0")
+                        .Background("#F8FAFC")
+                        .Padding(16)
                         .Text("No trend data is available.")
+                        .FontSize(9)
                         .FontColor("#64748B");
 
                     return;
                 }
 
+                // Always keep the Business Value Trend graph visible.
+                // If there is only one reporting date, the graph displays
+                // one point. As records are added on other dates, the
+                // points are automatically connected into a trend line.
                 column.Item()
                     .Height(210)
                     .Svg(size =>
@@ -477,6 +486,19 @@ namespace InsightFlow.Services
                             data,
                             size.Width,
                             size.Height));
+
+                if (data.Count == 1)
+                {
+                    ReportTrendItem item = data[0];
+
+                    column.Item()
+                        .Text(
+                            $"{item.Date:dd MMM yyyy}: R {item.BusinessValue:N2} from {item.Activities:N0} " +
+                            (item.Activities == 1 ? "activity." : "activities.") +
+                            " More reporting dates will build the trend line.")
+                        .FontSize(8)
+                        .FontColor("#64748B");
+                }
             });
         }
 

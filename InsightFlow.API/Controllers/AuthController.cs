@@ -47,18 +47,28 @@ namespace InsightFlow.API.Controllers
                 });
             }
 
-            string email = request.CompanyEmail
-                .Trim()
-                .ToLowerInvariant();
+            // Normalize login values
+            string email =
+                request.CompanyEmail
+                    .Trim()
+                    .ToLowerInvariant();
 
-            string employeeId = request.EmployeeId.Trim();
+            string employeeId =
+                request.EmployeeId
+                    .Trim()
+                    .ToUpperInvariant();
 
-            // Find employee using BOTH email and employee ID
-            var employee = await _context.Employees
-                .Include(e => e.Department)
-                .FirstOrDefaultAsync(e =>
-                    e.CompanyEmail.ToLower() == email &&
-                    e.EmployeeId == employeeId);
+            // =================================================
+            // FIND EMPLOYEE
+            // Both Company Email and Employee ID must match.
+            // =================================================
+
+            var employee =
+                await _context.Employees
+                    .Include(e => e.Department)
+                    .FirstOrDefaultAsync(e =>
+                        e.CompanyEmail.ToLower() == email &&
+                        e.EmployeeId == employeeId);
 
             if (employee == null)
             {
@@ -69,17 +79,25 @@ namespace InsightFlow.API.Controllers
                 });
             }
 
-            // Disabled employees cannot log in
+            // =================================================
+            // ACCOUNT STATUS
+            // Inactive employees cannot access the system.
+            // =================================================
+
             if (!employee.IsActive)
             {
                 return Unauthorized(new
                 {
                     success = false,
-                    message = "This employee account is disabled."
+                    message =
+                        "This employee account is disabled."
                 });
             }
 
-            // Verify hashed password
+            // =================================================
+            // VERIFY PASSWORD HASH
+            // =================================================
+
             var passwordResult =
                 _passwordHasher.VerifyHashedPassword(
                     employee,
@@ -96,15 +114,20 @@ namespace InsightFlow.API.Controllers
                 });
             }
 
-            // Generate JWT
-            string token = GenerateJwtToken(employee);
+            // =================================================
+            // GENERATE JWT
+            // =================================================
+
+            string token =
+                GenerateJwtToken(employee);
 
             int expiryMinutes =
                 _configuration.GetValue<int?>(
                     "Jwt:ExpiryMinutes") ?? 60;
 
             DateTime expiresAt =
-                DateTime.UtcNow.AddMinutes(expiryMinutes);
+                DateTime.UtcNow.AddMinutes(
+                    expiryMinutes);
 
             return Ok(new
             {
@@ -116,19 +139,32 @@ namespace InsightFlow.API.Controllers
 
                 employee = new
                 {
-                    accountId = employee.AccountId,
-                    employeeId = employee.EmployeeId,
-                    firstName = employee.FirstName,
-                    lastName = employee.LastName,
+                    accountId =
+                        employee.AccountId,
+
+                    employeeId =
+                        employee.EmployeeId,
+
+                    firstName =
+                        employee.FirstName,
+
+                    lastName =
+                        employee.LastName,
 
                     fullName =
                         $"{employee.FirstName} {employee.LastName}",
 
-                    companyEmail = employee.CompanyEmail,
-                    jobTitle = employee.JobTitle,
-                    role = employee.Role,
+                    companyEmail =
+                        employee.CompanyEmail,
 
-                    departmentId = employee.DepartmentId,
+                    jobTitle =
+                        employee.JobTitle,
+
+                    role =
+                        employee.Role,
+
+                    departmentId =
+                        employee.DepartmentId,
 
                     department =
                         employee.Department?.DepartmentName,
@@ -142,7 +178,9 @@ namespace InsightFlow.API.Controllers
         // =====================================================
         // GENERATE JWT TOKEN
         // =====================================================
-        private string GenerateJwtToken(Employee employee)
+
+        private string GenerateJwtToken(
+            Employee employee)
         {
             string jwtKey =
                 _configuration["Jwt:Key"]
@@ -163,61 +201,76 @@ namespace InsightFlow.API.Controllers
                 _configuration.GetValue<int?>(
                     "Jwt:ExpiryMinutes") ?? 60;
 
-            var claims = new List<Claim>
-            {
-                new(
-                    JwtRegisteredClaimNames.Sub,
-                    employee.AccountId.ToString()),
+            // =================================================
+            // JWT CLAIMS
+            // =================================================
 
-                new(
-                    ClaimTypes.NameIdentifier,
-                    employee.AccountId.ToString()),
+            var claims =
+                new List<Claim>
+                {
+                    new(
+                        JwtRegisteredClaimNames.Sub,
+                        employee.AccountId.ToString()),
 
-                new(
-                    ClaimTypes.Name,
-                    $"{employee.FirstName} {employee.LastName}"),
+                    new(
+                        ClaimTypes.NameIdentifier,
+                        employee.AccountId.ToString()),
 
-                new(
-                    ClaimTypes.Email,
-                    employee.CompanyEmail),
+                    new(
+                        ClaimTypes.Name,
+                        $"{employee.FirstName} {employee.LastName}"),
 
-                new(
-                    ClaimTypes.Role,
-                    employee.Role),
+                    new(
+                        ClaimTypes.Email,
+                        employee.CompanyEmail),
 
-                new(
-                    "employeeId",
-                    employee.EmployeeId),
+                    new(
+                        ClaimTypes.Role,
+                        employee.Role),
 
-                new(
-                    "departmentId",
-                    employee.DepartmentId.ToString()),
+                    new(
+                        "employeeId",
+                        employee.EmployeeId),
 
-                new(
-                    "department",
-                    employee.Department?.DepartmentName
-                    ?? string.Empty),
+                    new(
+                        "departmentId",
+                        employee.DepartmentId.ToString()),
 
-                new(
-                    "departmentCode",
-                    employee.Department?.DepartmentCode
-                    ?? string.Empty)
-            };
+                    new(
+                        "department",
+                        employee.Department?.DepartmentName
+                        ?? string.Empty),
 
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtKey));
+                    new(
+                        "departmentCode",
+                        employee.Department?.DepartmentCode
+                        ?? string.Empty)
+                };
 
-            var credentials = new SigningCredentials(
-                key,
-                SecurityAlgorithms.HmacSha256);
+            // =================================================
+            // SIGN TOKEN
+            // =================================================
 
-            var token = new JwtSecurityToken(
-                issuer: jwtIssuer,
-                audience: jwtAudience,
-                claims: claims,
-                expires: DateTime.UtcNow
-                    .AddMinutes(expiryMinutes),
-                signingCredentials: credentials);
+            var key =
+                new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(
+                        jwtKey));
+
+            var credentials =
+                new SigningCredentials(
+                    key,
+                    SecurityAlgorithms.HmacSha256);
+
+            var token =
+                new JwtSecurityToken(
+                    issuer: jwtIssuer,
+                    audience: jwtAudience,
+                    claims: claims,
+                    expires:
+                        DateTime.UtcNow.AddMinutes(
+                            expiryMinutes),
+                    signingCredentials:
+                        credentials);
 
             return new JwtSecurityTokenHandler()
                 .WriteToken(token);
@@ -227,6 +280,7 @@ namespace InsightFlow.API.Controllers
     // =========================================================
     // LOGIN REQUEST
     // =========================================================
+
     public class LoginRequest
     {
         public string CompanyEmail { get; set; }

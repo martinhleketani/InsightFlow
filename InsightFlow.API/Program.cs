@@ -10,72 +10,114 @@ var builder = WebApplication.CreateBuilder(args);
 // =====================================================
 // CONTROLLERS
 // =====================================================
+
 builder.Services.AddControllers();
+
 
 // =====================================================
 // SWAGGER / OPENAPI
 // =====================================================
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "InsightFlow API",
-        Version = "v1"
-    });
-
-    // JWT Authorize button in Swagger
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Enter your JWT token."
-    });
-
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+    options.SwaggerDoc(
+        "v1",
+        new OpenApiInfo
         {
-            new OpenApiSecurityScheme
+            Title = "InsightFlow API",
+            Version = "v1"
+        });
+
+
+    // =================================================
+    // JWT AUTHORIZE BUTTON IN SWAGGER
+    // =================================================
+
+    options.AddSecurityDefinition(
+        "Bearer",
+        new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+
+            Type = SecuritySchemeType.Http,
+
+            Scheme = "bearer",
+
+            BearerFormat = "JWT",
+
+            In = ParameterLocation.Header,
+
+            Description =
+                "Enter your JWT token."
+        });
+
+
+    options.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
             {
-                Reference = new OpenApiReference
+                new OpenApiSecurityScheme
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
+                    Reference =
+                        new OpenApiReference
+                        {
+                            Type =
+                                ReferenceType.SecurityScheme,
+
+                            Id =
+                                "Bearer"
+                        }
+                },
+
+                Array.Empty<string>()
+            }
+        });
 });
+
 
 // =====================================================
 // MYSQL DATABASE
 // =====================================================
+
 var connectionString =
-    builder.Configuration.GetConnectionString("DefaultConnection");
+    builder.Configuration
+        .GetConnectionString(
+            "DefaultConnection");
+
 
 if (string.IsNullOrWhiteSpace(connectionString))
 {
     throw new InvalidOperationException(
-        "DefaultConnection was not found.");
+        "DefaultConnection was not found. " +
+        "Configure the database connection string " +
+        "using User Secrets or another secure " +
+        "configuration provider.");
 }
 
-builder.Services.AddDbContext<InsightFlowDbContext>(options =>
-    options.UseMySql(
-        connectionString,
-        ServerVersion.AutoDetect(connectionString)
-    ));
+
+builder.Services.AddDbContext<InsightFlowDbContext>(
+    options =>
+        options.UseMySql(
+            connectionString,
+            ServerVersion.AutoDetect(
+                connectionString)));
+
 
 // =====================================================
 // JWT SETTINGS
 // =====================================================
-var jwtKey = builder.Configuration["Jwt:Key"];
-var jwtIssuer = builder.Configuration["Jwt:Issuer"];
-var jwtAudience = builder.Configuration["Jwt:Audience"];
+
+var jwtKey =
+    builder.Configuration["Jwt:Key"];
+
+var jwtIssuer =
+    builder.Configuration["Jwt:Issuer"];
+
+var jwtAudience =
+    builder.Configuration["Jwt:Audience"];
+
 
 if (string.IsNullOrWhiteSpace(jwtKey))
 {
@@ -83,11 +125,13 @@ if (string.IsNullOrWhiteSpace(jwtKey))
         "JWT Key was not found.");
 }
 
+
 if (string.IsNullOrWhiteSpace(jwtIssuer))
 {
     throw new InvalidOperationException(
         "JWT Issuer was not found.");
 }
+
 
 if (string.IsNullOrWhiteSpace(jwtAudience))
 {
@@ -95,9 +139,11 @@ if (string.IsNullOrWhiteSpace(jwtAudience))
         "JWT Audience was not found.");
 }
 
+
 // =====================================================
 // JWT AUTHENTICATION
 // =====================================================
+
 builder.Services
     .AddAuthentication(options =>
     {
@@ -113,43 +159,65 @@ builder.Services
             new TokenValidationParameters
             {
                 ValidateIssuer = true,
+
                 ValidateAudience = true,
+
                 ValidateLifetime = true,
+
                 ValidateIssuerSigningKey = true,
 
-                ValidIssuer = jwtIssuer,
-                ValidAudience = jwtAudience,
+                ValidIssuer =
+                    jwtIssuer,
+
+                ValidAudience =
+                    jwtAudience,
 
                 IssuerSigningKey =
                     new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtKey)),
+                        Encoding.UTF8.GetBytes(
+                            jwtKey)),
 
-                ClockSkew = TimeSpan.Zero
+                ClockSkew =
+                    TimeSpan.Zero
             };
     });
+
 
 // =====================================================
 // BUILD APPLICATION
 // =====================================================
-var app = builder.Build();
+
+var app =
+    builder.Build();
+
 
 // =====================================================
 // DATABASE MIGRATION + INITIAL DATA
 // =====================================================
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider
-        .GetRequiredService<InsightFlowDbContext>();
 
-    await DbSeeder.SeedAsync(dbContext);
+using (var scope =
+       app.Services.CreateScope())
+{
+    var dbContext =
+        scope.ServiceProvider
+            .GetRequiredService<
+                InsightFlowDbContext>();
+
+
+    await DbSeeder.SeedAsync(
+        dbContext,
+        builder.Configuration);
 }
+
 
 // =====================================================
 // SWAGGER
 // =====================================================
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
+
 
     app.UseSwaggerUI(options =>
     {
@@ -159,12 +227,15 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+
 // =====================================================
 // HTTP PIPELINE
 // =====================================================
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

@@ -10,18 +10,28 @@ namespace InsightFlow
         private const string CompanyDomain =
             "@insightflow.co.za";
 
+        private const string RememberEmployeeIdKey =
+            "RememberEmployeeId";
+
+        private const string RememberedEmployeeIdKey =
+            "RememberedEmployeeId";
+
         private readonly ApiService _apiService;
         private readonly AuthService _authService;
+
 
         public MainPage()
         {
             InitializeComponent();
 
             _apiService = new ApiService();
-            _authService = new AuthService(_apiService);
+
+            _authService =
+                new AuthService(_apiService);
 
             LoadRememberedEmployeeId();
         }
+
 
         // =========================================================
         // LOGIN
@@ -33,17 +43,19 @@ namespace InsightFlow
         {
             HideLoginError();
 
+            // -----------------------------------------------------
+            // READ AND CLEAN LOGIN VALUES
+            // -----------------------------------------------------
+
             string email =
-                EmailEntry.Text?.Trim()
-                ?? string.Empty;
+                CleanEmail(EmailEntry.Text);
 
             string employeeId =
-                EmployeeIdEntry.Text?.Trim().ToUpperInvariant()
-                ?? string.Empty;
+                CleanEmployeeId(EmployeeIdEntry.Text);
 
             string password =
-                PasswordEntry.Text
-                ?? string.Empty;
+                CleanPassword(PasswordEntry.Text);
+
 
             // -----------------------------------------------------
             // REQUIRED FIELDS
@@ -54,27 +66,36 @@ namespace InsightFlow
                 ShowLoginError(
                     "Enter your company email.");
 
+                EmailEntry.Focus();
+
                 return;
             }
+
 
             if (string.IsNullOrWhiteSpace(employeeId))
             {
                 ShowLoginError(
                     "Enter your Employee ID.");
 
+                EmployeeIdEntry.Focus();
+
                 return;
             }
+
 
             if (string.IsNullOrWhiteSpace(password))
             {
                 ShowLoginError(
                     "Enter your password.");
 
+                PasswordEntry.Focus();
+
                 return;
             }
 
+
             // -----------------------------------------------------
-            // COMPANY EMAIL
+            // COMPANY EMAIL VALIDATION
             // -----------------------------------------------------
 
             if (!email.EndsWith(
@@ -84,11 +105,14 @@ namespace InsightFlow
                 ShowLoginError(
                     "Access denied. Use your approved company email.");
 
+                EmailEntry.Focus();
+
                 return;
             }
 
+
             // -----------------------------------------------------
-            // EMPLOYEE ID FORMAT
+            // EMPLOYEE ID VALIDATION
             // -----------------------------------------------------
 
             if (!employeeId.StartsWith(
@@ -98,15 +122,36 @@ namespace InsightFlow
                 ShowLoginError(
                     "The Employee ID is not valid.");
 
+                EmployeeIdEntry.Focus();
+
                 return;
             }
 
+
             // -----------------------------------------------------
-            // DISABLE BUTTON WHILE CONNECTING
+            // PUT CLEANED VALUES BACK INTO TEXTBOXES
             // -----------------------------------------------------
 
-            SignInButton.IsEnabled = false;
-            SignInButton.Text = "SIGNING IN...";
+            EmailEntry.Text =
+                email;
+
+            EmployeeIdEntry.Text =
+                employeeId;
+
+            PasswordEntry.Text =
+                password;
+
+
+            // -----------------------------------------------------
+            // DISABLE SIGN IN WHILE CONNECTING
+            // -----------------------------------------------------
+
+            SignInButton.IsEnabled =
+                false;
+
+            SignInButton.Text =
+                "SIGNING IN...";
+
 
             try
             {
@@ -120,15 +165,18 @@ namespace InsightFlow
                         employeeId,
                         password);
 
+
                 if (!result.Success)
                 {
                     ShowLoginError(
-                        string.IsNullOrWhiteSpace(result.Message)
+                        string.IsNullOrWhiteSpace(
+                            result.Message)
                             ? "The credentials could not be verified."
                             : result.Message);
 
                     return;
                 }
+
 
                 if (result.Employee == null)
                 {
@@ -138,8 +186,14 @@ namespace InsightFlow
                     return;
                 }
 
+
+                // =================================================
+                // SUCCESSFUL LOGIN
+                // =================================================
+
                 LoginSuccessful(
                     result.Employee.EmployeeId);
+
 
                 // =================================================
                 // ADMINISTRATOR
@@ -155,6 +209,7 @@ namespace InsightFlow
                     return;
                 }
 
+
                 // =================================================
                 // MANAGER
                 // =================================================
@@ -168,6 +223,7 @@ namespace InsightFlow
 
                     return;
                 }
+
 
                 // =================================================
                 // EMPLOYEE
@@ -201,8 +257,10 @@ namespace InsightFlow
                             Role =
                                 result.Employee.Role,
 
-                            IsActive = true
+                            IsActive =
+                                true
                         };
+
 
                     await Navigation.PushAsync(
                         new EmployeeDashboardPage(
@@ -210,6 +268,11 @@ namespace InsightFlow
 
                     return;
                 }
+
+
+                // =================================================
+                // UNKNOWN ROLE
+                // =================================================
 
                 ShowLoginError(
                     "Your account role is not supported.");
@@ -221,10 +284,82 @@ namespace InsightFlow
             }
             finally
             {
-                SignInButton.IsEnabled = true;
-                SignInButton.Text = "SIGN IN";
+                SignInButton.IsEnabled =
+                    true;
+
+                SignInButton.Text =
+                    "SIGN IN";
             }
         }
+
+
+        // =========================================================
+        // CLEAN EMAIL
+        // =========================================================
+
+        private static string CleanEmail(
+            string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return string.Empty;
+            }
+
+            return value
+                .Replace("\r", string.Empty)
+                .Replace("\n", string.Empty)
+                .Replace("\t", string.Empty)
+                .Trim()
+                .ToLowerInvariant();
+        }
+
+
+        // =========================================================
+        // CLEAN EMPLOYEE ID
+        // =========================================================
+
+        private static string CleanEmployeeId(
+            string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return string.Empty;
+            }
+
+            return value
+                .Replace("\r", string.Empty)
+                .Replace("\n", string.Empty)
+                .Replace("\t", string.Empty)
+                .Trim()
+                .ToUpperInvariant();
+        }
+
+
+        // =========================================================
+        // CLEAN PASSWORD
+        // =========================================================
+
+        private static string CleanPassword(
+            string? value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return string.Empty;
+            }
+
+            // Remove accidental line breaks/tabs that can be copied
+            // with credentials and remove surrounding whitespace.
+            //
+            // Internal spaces are NOT removed because they may be
+            // part of a legitimate password.
+
+            return value
+                .Replace("\r", string.Empty)
+                .Replace("\n", string.Empty)
+                .Replace("\t", string.Empty)
+                .Trim();
+        }
+
 
         // =========================================================
         // SUCCESSFUL LOGIN
@@ -236,6 +371,7 @@ namespace InsightFlow
             SaveEmployeeIdIfRequested(
                 employeeId);
 
+            // Password must never remain on the login page.
             PasswordEntry.Text =
                 string.Empty;
 
@@ -247,6 +383,7 @@ namespace InsightFlow
 
             HideLoginError();
         }
+
 
         // =========================================================
         // SHOW / HIDE PASSWORD
@@ -265,6 +402,7 @@ namespace InsightFlow
                     : "Hide";
         }
 
+
         // =========================================================
         // REMEMBER EMPLOYEE ID
         // =========================================================
@@ -275,47 +413,69 @@ namespace InsightFlow
             if (RememberEmployeeCheckBox.IsChecked)
             {
                 Preferences.Default.Set(
-                    "RememberEmployeeId",
+                    RememberEmployeeIdKey,
                     true);
 
                 Preferences.Default.Set(
-                    "RememberedEmployeeId",
+                    RememberedEmployeeIdKey,
                     employeeId);
+
+                // Keep the remembered Employee ID visible.
+                EmployeeIdEntry.Text =
+                    employeeId;
             }
             else
             {
                 Preferences.Default.Set(
-                    "RememberEmployeeId",
+                    RememberEmployeeIdKey,
                     false);
 
                 Preferences.Default.Remove(
-                    "RememberedEmployeeId");
+                    RememberedEmployeeIdKey);
             }
         }
+
+
+        // =========================================================
+        // LOAD REMEMBERED EMPLOYEE ID
+        // =========================================================
 
         private void LoadRememberedEmployeeId()
         {
             bool rememberEmployee =
                 Preferences.Default.Get(
-                    "RememberEmployeeId",
+                    RememberEmployeeIdKey,
                     false);
+
 
             if (!rememberEmployee)
             {
+                RememberEmployeeCheckBox.IsChecked =
+                    false;
+
                 return;
             }
 
+
             string savedEmployeeId =
                 Preferences.Default.Get(
-                    "RememberedEmployeeId",
+                    RememberedEmployeeIdKey,
                     string.Empty);
 
-            EmployeeIdEntry.Text =
-                savedEmployeeId;
+
+            if (!string.IsNullOrWhiteSpace(
+                    savedEmployeeId))
+            {
+                EmployeeIdEntry.Text =
+                    CleanEmployeeId(
+                        savedEmployeeId);
+            }
+
 
             RememberEmployeeCheckBox.IsChecked =
                 true;
         }
+
 
         // =========================================================
         // FORGOT PASSWORD
@@ -327,13 +487,23 @@ namespace InsightFlow
         {
             HideLoginError();
 
+
             string email =
-                EmailEntry.Text?.Trim()
-                ?? string.Empty;
+                CleanEmail(
+                    EmailEntry.Text);
 
             string employeeId =
-                EmployeeIdEntry.Text?.Trim().ToUpperInvariant()
-                ?? string.Empty;
+                CleanEmployeeId(
+                    EmployeeIdEntry.Text);
+
+
+            // Put cleaned values back into the fields.
+            EmailEntry.Text =
+                email;
+
+            EmployeeIdEntry.Text =
+                employeeId;
+
 
             if (string.IsNullOrWhiteSpace(email) ||
                 string.IsNullOrWhiteSpace(employeeId))
@@ -345,6 +515,7 @@ namespace InsightFlow
 
                 return;
             }
+
 
             if (!email.EndsWith(
                     CompanyDomain,
@@ -358,12 +529,14 @@ namespace InsightFlow
                 return;
             }
 
-            // We will connect this to the Password Reset API later.
+
+            // Password Reset API will be connected later.
             await DisplayAlert(
                 "Password Reset",
                 "Password reset will be connected to the InsightFlow API in the next backend stage.",
                 "OK");
         }
+
 
         // =========================================================
         // ERROR DISPLAY
@@ -378,6 +551,7 @@ namespace InsightFlow
             LoginErrorBorder.IsVisible =
                 true;
         }
+
 
         private void HideLoginError()
         {
